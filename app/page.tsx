@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,7 +15,7 @@ const plans = [
     cadence: 'enkratno',
     features: ['1 oseba', 'Neomejeni dokumenti', 'E-mail opomniki'],
     popular: false,
-    variant: 'quiet',
+    variant: 'samostojni',
   },
   {
     name: 'Družinski',
@@ -22,7 +23,7 @@ const plans = [
     cadence: 'enkratno',
     features: ['Do 6 oseb', 'Neomejeni dokumenti', 'E-mail opomniki', 'Skupni pregled'],
     popular: true,
-    variant: 'featured',
+    variant: 'druzinski',
   },
   {
     name: 'Poslovni',
@@ -30,7 +31,7 @@ const plans = [
     cadence: '/ mesec',
     features: ['Neomejeni zaposleni', 'Neomejeni dokumenti', 'E-mail opomniki', 'Admin nadzorna plošča', 'Izvoz poročil'],
     popular: false,
-    variant: 'business',
+    variant: 'poslovni',
   },
 ];
 
@@ -60,6 +61,7 @@ function scrollToPackages() {
 }
 
 export default function Home() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('idle');
 
@@ -78,14 +80,20 @@ export default function Home() {
       <nav className="fixed left-0 right-0 top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-8">
           <a href="#top" className="font-display text-xl font-bold tracking-tight focus:outline-none focus:ring-4 focus:ring-primary focus:ring-offset-2">Veljavno</a>
-          <Button onClick={scrollToPackages} className="rounded-full px-5 text-xs font-semibold uppercase tracking-[0.16em] transition-all hover:-translate-y-0.5 focus:ring-4 focus:ring-primary focus:ring-offset-2">
-            Poglej pakete
-          </Button>
+  <div className="flex items-center gap-6">
+  <div className="hidden md:flex items-center gap-6">
+    <button onClick={() => document.getElementById('paketi')?.scrollIntoView({ behavior: 'smooth' })} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Paketi</button>
+    <button onClick={() => document.getElementById('cakalna-lista')?.scrollIntoView({ behavior: 'smooth' })} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">FAQ</button>
+  </div>
+  <div className="flex items-center gap-3">
+    <a href="/prijava" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-4 py-2 rounded-full border border-border hover:border-primary">Prijava</a>
+    <a href="/registracija" className="text-sm font-semibold text-white bg-primary px-5 py-2 rounded-full hover:bg-primary/90 transition-colors">Registracija</a>
+  </div>
+</div>
         </div>
       </nav>
 
       <section id="top" className="relative pt-36 md:pt-44">
-        
         <div className="absolute right-0 top-24 hidden h-[560px] w-[46vw] rounded-l-[5rem] bg-gradient-to-br from-secondary via-background to-accent md:block" />
         <div className="mx-auto grid max-w-7xl gap-12 px-5 pb-12 md:grid-cols-12 md:px-8 md:pb-16">
           <motion.div initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="relative z-10 md:col-span-9">
@@ -161,7 +169,7 @@ export default function Home() {
           </div>
           <div className="grid gap-6 lg:grid-cols-3">
             {plans.map((plan) => (
-              <motion.div key={plan.name} whileHover={{ y: -8 }} className={`relative rounded-[2rem] border p-8 backdrop-blur-xl transition-all ${plan.variant === 'featured' ? 'border-primary bg-card shadow-2xl shadow-primary/15' : plan.variant === 'business' ? 'border-border bg-secondary/70' : 'border-border bg-card/80'}`}>
+              <motion.div key={plan.name} whileHover={{ y: -8 }} className={`relative rounded-[2rem] border p-8 backdrop-blur-xl transition-all ${plan.variant === 'druzinski' ? 'border-primary bg-card shadow-2xl shadow-primary/15' : plan.variant === 'poslovni' ? 'border-border bg-secondary/70' : 'border-border bg-card/80'}`}>
                 {plan.popular && (
                   <div className="absolute right-6 top-6 rounded-full bg-green-500 px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-white">Najpopularnejši</div>
                 )}
@@ -177,7 +185,7 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-                <Button onClick={() => document.getElementById('cakalna-lista')?.scrollIntoView({ behavior: 'smooth' })} className={`mt-10 w-full rounded-full py-6 text-xs font-semibold uppercase tracking-[0.16em] focus:ring-4 focus:ring-primary focus:ring-offset-2 ${plan.popular ? 'animate-[pulse_5s_ease-in-out_infinite]' : ''}`} variant={plan.popular ? 'default' : 'outline'}>
+                <Button onClick={() => router.push(`/registracija?paket=${plan.variant}`)} className={`mt-10 w-full rounded-full py-6 text-xs font-semibold uppercase tracking-[0.16em] focus:ring-4 focus:ring-primary focus:ring-offset-2 ${plan.popular ? 'animate-[pulse_5s_ease-in-out_infinite]' : ''}`} variant={plan.popular ? 'default' : 'outline'}>
                   Izberi paket
                 </Button>
               </motion.div>
