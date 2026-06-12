@@ -43,7 +43,10 @@ export default function Prijava() {
             <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="janez@email.si" required />
           </div>
           <div>
-            <label className="text-sm font-medium mb-1 block">Geslo</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-sm font-medium">Geslo</label>
+              <a href="/pozabljeno-geslo" className="text-xs text-primary hover:underline">Pozabljeno geslo?</a>
+            </div>
             <Input type="password" value={geslo} onChange={e => setGeslo(e.target.value)} placeholder="Vaše geslo" required />
           </div>
 
