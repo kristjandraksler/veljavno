@@ -79,7 +79,22 @@ export default function Home() {
     <main className="min-h-screen overflow-hidden bg-background text-foreground">
       <nav className="fixed left-0 right-0 top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-8">
-          <a href="#top" className="font-display text-xl font-bold tracking-tight focus:outline-none focus:ring-4 focus:ring-primary focus:ring-offset-2">Veljavno</a>
+  <a href="#top" className="flex items-center gap-3">
+  <svg width="36" height="44" viewBox="0 0 60 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="60" height="72" rx="10" fill="#2563eb"/>
+    <rect x="10" y="8" width="26" height="4" rx="2" fill="white" fillOpacity="0.5"/>
+    <rect x="10" y="17" width="40" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+    <rect x="10" y="26" width="32" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+    <rect x="10" y="35" width="36" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+    <circle cx="43" cy="56" r="14" fill="white"/>
+    <path d="M36 56 L41 61 L50 50" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+  <div className="flex flex-col">
+    <span className="font-display text-xl font-bold tracking-[0.08em] leading-tight">VELJAVNO</span>
+    <span className="text-xs text-muted-foreground hidden md:block">Sistem za pravočasne opomnike</span>
+    <div className="w-8 h-0.5 bg-primary mt-1 hidden md:block" />
+  </div>
+</a>
   <div className="flex items-center gap-6">
   <div className="hidden md:flex items-center gap-6">
     <button onClick={() => document.getElementById('paketi')?.scrollIntoView({ behavior: 'smooth' })} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Paketi</button>
