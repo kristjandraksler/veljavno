@@ -118,19 +118,32 @@ export default function Dashboard() {
 
   return (
     <main className="min-h-screen bg-background">
-      {/* Navigacija */}
       <nav className="border-b border-border px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <a href="/" className="font-display text-xl font-bold">Veljavno</a>
+          <a href="/" className="flex items-center gap-3">
+            <svg width="32" height="40" viewBox="0 0 60 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="0" y="0" width="60" height="72" rx="10" fill="#2563eb"/>
+              <rect x="10" y="8" width="26" height="4" rx="2" fill="white" fillOpacity="0.5"/>
+              <rect x="10" y="17" width="40" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+              <rect x="10" y="26" width="32" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+              <rect x="10" y="35" width="36" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+              <circle cx="43" cy="56" r="14" fill="white"/>
+              <path d="M36 56 L41 61 L50 50" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <div className="flex flex-col">
+              <span className="font-display text-lg font-bold tracking-[0.08em] leading-tight">VELJAVNO</span>
+              <span className="text-xs text-muted-foreground hidden md:block">Sistem za pravočasne opomnike</span>
+              <div className="w-8 h-0.5 bg-primary mt-1 hidden md:block" />
+            </div>
+          </a>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">{user?.email}</span>
+            <span className="text-sm text-muted-foreground hidden md:block">{user?.email}</span>
             <Button variant="outline" onClick={odjava} className="rounded-full text-xs px-4 py-2">Odjava</Button>
           </div>
         </div>
       </nav>
 
       <div className="max-w-5xl mx-auto px-6 py-10">
-        {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl font-bold">Moji dokumenti</h1>
@@ -141,7 +154,6 @@ export default function Dashboard() {
           </Button>
         </div>
 
-        {/* Obrazec */}
         {showForm && (
           <div className="bg-card border border-border rounded-2xl p-6 mb-6">
             <h2 className="font-semibold mb-4">{editDoc ? 'Uredi dokument' : 'Nov dokument'}</h2>
@@ -173,7 +185,6 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Seznam dokumentov */}
         {dokumenti.length === 0 && !showForm ? (
           <div className="text-center py-20 text-muted-foreground">
             <p className="text-lg font-medium mb-2">Še nimate dokumentov</p>
