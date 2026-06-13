@@ -141,7 +141,40 @@ export default function Dashboard() {
     router.push('/')
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center">Nalagam...</div>
+  if (loading) return (
+  <main className="min-h-screen bg-background">
+    <nav className="border-b border-border px-6 py-4">
+      <div className="max-w-5xl mx-auto flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-10 bg-muted rounded-lg animate-pulse" />
+          <div className="flex flex-col gap-1">
+            <div className="w-24 h-4 bg-muted rounded animate-pulse" />
+            <div className="w-32 h-3 bg-muted rounded animate-pulse" />
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div className="max-w-5xl mx-auto px-6 py-10">
+      <div className="flex justify-between mb-8">
+        <div>
+          <div className="w-40 h-7 bg-muted rounded animate-pulse mb-2" />
+          <div className="w-24 h-4 bg-muted rounded animate-pulse" />
+        </div>
+        <div className="w-36 h-9 bg-muted rounded-full animate-pulse" />
+      </div>
+      <div className="grid grid-cols-3 gap-4 mb-8">
+        {[1,2,3].map(i => (
+          <div key={i} className="rounded-2xl p-4 border border-border animate-pulse bg-muted h-20" />
+        ))}
+      </div>
+      <div className="flex flex-col gap-4">
+        {[1,2,3].map(i => (
+          <div key={i} className="bg-muted border border-border rounded-2xl p-6 h-24 animate-pulse" />
+        ))}
+      </div>
+    </div>
+  </main>
+)
 
   return (
     <main className="min-h-screen bg-background">
