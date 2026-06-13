@@ -49,13 +49,25 @@ export default function Dashboard() {
   const [datumDoc, setDatumDoc] = useState('')
   const [izbraniOpomniki, setIzbraniOpomniki] = useState<number[]>([30, 90])
 
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      if (!data.user) { router.push('/prijava'); return }
-      setUser(data.user)
-      naloziDokumente(data.user.id)
-    })
-  }, [])
+ useEffect(() => {
+  supabase.auth.getUser().then(async ({ data }) => {
+    if (!data.user) { router.push('/prijava'); return }
+    
+    const { data: profil } = await supabase
+      .from('profiles')
+      .select('placilo_potrjeno')
+      .eq('id', data.user.id)
+      .single()
+
+    if (!profil?.placilo_potrjeno) {
+      router.push('/registracija')
+      return
+    }
+
+    setUser(data.user)
+    naloziDokumente(data.user.id)
+  })
+}, [])
 
   async function naloziDokumente(userId: string) {
     const { data } = await supabase.from('documents').select('*').eq('user_id', userId).order('datum_poteka')
@@ -137,9 +149,10 @@ export default function Dashboard() {
             </div>
           </a>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground hidden md:block">{user?.email}</span>
-            <Button variant="outline" onClick={odjava} className="rounded-full text-xs px-4 py-2">Odjava</Button>
-          </div>
+  <span className="text-sm text-muted-foreground hidden md:block">{user?.email}</span>
+  <a href="/nastavitve" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden md:block">Nastavitve</a>
+  <Button variant="outline" onClick={odjava} className="rounded-full text-xs px-4 py-2">Odjava</Button>
+</div>
         </div>
       </nav>
 
