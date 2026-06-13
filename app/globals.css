@@ -33,4 +33,23 @@
     color: var(--color-foreground);
     font-family: var(--font-body);
   }
+
+  .dark {
+    --color-background: hsl(222 47% 7%);
+    --color-foreground: hsl(210 40% 98%);
+    --color-card: hsl(222 47% 10%);
+    --color-card-foreground: hsl(210 40% 98%);
+    --color-primary: hsl(217 91% 60%);
+    --color-primary-foreground: hsl(0 0% 100%);
+    --color-secondary: hsl(222 34% 14%);
+    --color-secondary-foreground: hsl(210 40% 98%);
+    --color-muted: hsl(222 34% 14%);
+    --color-muted-foreground: hsl(215 20% 65%);
+    --color-accent: hsl(222 34% 18%);
+    --color-accent-foreground: hsl(213 100% 90%);
+    --color-border: hsl(222 34% 18%);
+    --color-input: hsl(222 34% 18%);
+    --color-ring: hsl(217 91% 60%);
+    --color-validation: hsl(160 84% 39%);
+  }
 }

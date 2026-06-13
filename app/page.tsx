@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -62,6 +63,7 @@ function scrollToPackages() {
 
 export default function Home() {
   const router = useRouter();
+  const { theme, setTheme } = useTheme();
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('idle');
   const [mobileMenu, setMobileMenu] = useState(false);
@@ -100,21 +102,45 @@ export default function Home() {
           <div className="hidden md:flex items-center gap-6">
             <button onClick={() => document.getElementById('paketi')?.scrollIntoView({ behavior: 'smooth' })} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Paketi</button>
             <button onClick={() => document.getElementById('cakalna-lista')?.scrollIntoView({ behavior: 'smooth' })} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">FAQ</button>
+            <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="p-2 rounded-full border border-border hover:bg-secondary transition-colors" aria-label="Preklopi temo">
+              {theme === 'dark' ? (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+              ) : (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+              )}
+            </button>
             <a href="/prijava" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-4 py-2 rounded-full border border-border hover:border-primary">Prijava</a>
             <a href="/registracija" className="text-sm font-semibold text-white bg-primary px-5 py-2 rounded-full hover:bg-primary/90 transition-colors">Registracija</a>
           </div>
 
-          <button onClick={() => setMobileMenu(!mobileMenu)} className="md:hidden p-2 rounded-lg hover:bg-secondary transition-colors" aria-label="Meni">
-            {mobileMenu ? (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-              </svg>
-            ) : (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
-              </svg>
-            )}
-          </button>
+          <div className="flex items-center gap-2 md:hidden">
+            <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="p-2 rounded-full border border-border hover:bg-secondary transition-colors" aria-label="Preklopi temo">
+              {theme === 'dark' ? (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+              ) : (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+              )}
+            </button>
+            <button onClick={() => setMobileMenu(!mobileMenu)} className="p-2 rounded-lg hover:bg-secondary transition-colors" aria-label="Meni">
+              {mobileMenu ? (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              ) : (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
 
         {mobileMenu && (
@@ -122,7 +148,7 @@ export default function Home() {
             <button onClick={() => { document.getElementById('paketi')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenu(false) }} className="text-sm font-medium text-left py-2 text-muted-foreground hover:text-foreground transition-colors">Paketi</button>
             <button onClick={() => { document.getElementById('cakalna-lista')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenu(false) }} className="text-sm font-medium text-left py-2 text-muted-foreground hover:text-foreground transition-colors">FAQ</button>
             <hr className="border-border" />
-           <a href="/prijava" className="text-sm font-medium text-white bg-foreground px-5 py-2 rounded-full hover:bg-foreground/90 transition-colors text-center">Prijava</a>
+            <a href="/prijava" className="text-sm font-medium text-white bg-foreground px-5 py-2 rounded-full hover:bg-foreground/90 transition-colors text-center">Prijava</a>
             <a href="/registracija" className="text-sm font-semibold text-white bg-primary px-5 py-2 rounded-full hover:bg-primary/90 transition-colors text-center">Registracija</a>
           </div>
         )}
@@ -206,9 +232,9 @@ export default function Home() {
             {plans.map((plan) => (
               <motion.div key={plan.name} whileHover={{ y: -8 }} className={`relative rounded-[2rem] border p-8 backdrop-blur-xl transition-all ${plan.variant === 'druzinski' ? 'border-primary bg-card shadow-2xl shadow-primary/15' : plan.variant === 'poslovni' ? 'border-border bg-secondary/70' : 'border-border bg-card/80'}`}>
                 {plan.popular && (
-  <div className="rounded-full bg-green-500 px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-white inline-block mb-3">Najpopularnejši</div>
-)}
-<h3 className="text-2xl font-bold">{plan.name}</h3>
+                  <div className="rounded-full bg-green-500 px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-white inline-block mb-3">Najpopularnejši</div>
+                )}
+                <h3 className="text-2xl font-bold">{plan.name}</h3>
                 <div className="mt-8 flex items-end gap-2">
                   <span className="font-display text-5xl font-bold tracking-[-0.05em]">{plan.price}</span>
                   <span className="pb-2 text-muted-foreground">{plan.cadence}</span>
@@ -268,51 +294,49 @@ export default function Home() {
       </section>
 
       <footer className="bg-foreground text-background mt-20">
-  <div className="mx-auto max-w-7xl px-5 md:px-8 py-12">
-    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
-      
-      <div>
-        <a href="/" className="flex items-center gap-2 mb-3">
-          <svg width="28" height="34" viewBox="0 0 60 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="0" y="0" width="60" height="72" rx="10" fill="#2563eb"/>
-  <rect x="10" y="8" width="26" height="4" rx="2" fill="white" fillOpacity="0.5"/>
-  <rect x="10" y="17" width="40" height="4" rx="2" fill="white" fillOpacity="0.35"/>
-  <rect x="10" y="26" width="32" height="4" rx="2" fill="white" fillOpacity="0.35"/>
-  <rect x="10" y="35" width="36" height="4" rx="2" fill="white" fillOpacity="0.35"/>
-  <circle cx="43" cy="56" r="14" fill="white"/>
-  <path d="M36 56 L41 61 L50 50" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-</svg>
-          <div className="flex flex-col">
-            <span className="font-display text-lg font-bold text-white">VELJAVNO</span>
-            <span className="text-xs text-slate-400">Sistem za pravočasne opomnike</span>
-            <div className="w-8 h-0.5 bg-blue-400 mt-1" />
+        <div className="mx-auto max-w-7xl px-5 md:px-8 py-12">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
+            <div>
+              <a href="/" className="flex items-center gap-2 mb-3">
+                <svg width="28" height="34" viewBox="0 0 60 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0" y="0" width="60" height="72" rx="10" fill="#2563eb"/>
+                  <rect x="10" y="8" width="26" height="4" rx="2" fill="white" fillOpacity="0.5"/>
+                  <rect x="10" y="17" width="40" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+                  <rect x="10" y="26" width="32" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+                  <rect x="10" y="35" width="36" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+                  <circle cx="43" cy="56" r="14" fill="white"/>
+                  <path d="M36 56 L41 61 L50 50" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <div className="flex flex-col">
+                  <span className="font-display text-lg font-bold text-white">VELJAVNO</span>
+                  <span className="text-xs text-slate-400">Sistem za pravočasne opomnike</span>
+                  <div className="w-8 h-0.5 bg-blue-400 mt-1" />
+                </div>
+              </a>
+              <p className="text-sm text-slate-400 max-w-xs">Nikoli več potekle vozniške ali osebne izkaznice.</p>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 mb-1">Aplikacija</p>
+              <a href="/registracija" className="text-sm text-slate-300 hover:text-white transition-colors">Registracija</a>
+              <a href="/prijava" className="text-sm text-slate-300 hover:text-white transition-colors">Prijava</a>
+              <a href="/dashboard" className="text-sm text-slate-300 hover:text-white transition-colors">Dashboard</a>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 mb-1">Pravno</p>
+              <a href="/pogoji" className="text-sm text-slate-300 hover:text-white transition-colors">Splošni pogoji</a>
+              <a href="/zasebnost" className="text-sm text-slate-300 hover:text-white transition-colors">Zasebnost</a>
+              <a href="mailto:info@veljavno.si" className="text-sm text-slate-300 hover:text-white transition-colors">Kontakt</a>
+            </div>
           </div>
-        </a>
-        <p className="text-sm text-slate-400 max-w-xs">Nikoli več potekle vozniške ali osebne izkaznice.</p>
-      </div>
 
-      <div className="flex flex-col gap-3">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 mb-1">Aplikacija</p>
-        <a href="/registracija" className="text-sm text-slate-300 hover:text-white transition-colors">Registracija</a>
-        <a href="/prijava" className="text-sm text-slate-300 hover:text-white transition-colors">Prijava</a>
-        <a href="/dashboard" className="text-sm text-slate-300 hover:text-white transition-colors">Dashboard</a>
-      </div>
-
-      <div className="flex flex-col gap-3">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 mb-1">Pravno</p>
-        <a href="/pogoji" className="text-sm text-slate-300 hover:text-white transition-colors">Splošni pogoji</a>
-        <a href="/zasebnost" className="text-sm text-slate-300 hover:text-white transition-colors">Zasebnost</a>
-        <a href="mailto:info@veljavno.si" className="text-sm text-slate-300 hover:text-white transition-colors">Kontakt</a>
-      </div>
-
-    </div>
-
-    <div className="border-t border-slate-800 mt-10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
-      <p className="text-xs text-slate-500">© 2026 Veljavno. Vse pravice pridržane.</p>
-      <p className="text-xs text-slate-500">Narejeno v Sloveniji 🇸🇮</p>
-    </div>
-  </div>
-</footer>
+          <div className="border-t border-slate-800 mt-10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <p className="text-xs text-slate-500">© 2026 Veljavno. Vse pravice pridržane.</p>
+            <p className="text-xs text-slate-500">Narejeno v Sloveniji 🇸🇮</p>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }
