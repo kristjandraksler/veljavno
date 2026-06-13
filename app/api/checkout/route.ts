@@ -5,7 +5,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 const priceIds: Record<string, string> = {
   samostojni: process.env.NEXT_PUBLIC_STRIPE_SAMOSTOJNI!,
   druzinski: process.env.NEXT_PUBLIC_STRIPE_DRUZINSKI!,
-  poslovni: process.env.NEXT_PUBLIC_STRIPE_POSLOVNI!,
+  
 }
 
 export async function POST(request: Request) {

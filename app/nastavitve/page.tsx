@@ -139,23 +139,13 @@ export default function Nastavitve() {
     </a>
   </div>
 )}
-
 {profil?.paket === 'druzinski' && (
-  <div className="mt-4 bg-blue-50 border border-blue-200 rounded-xl p-4">
-    <p className="text-sm font-semibold text-blue-800 mb-1">Nadgradi na Poslovni</p>
-    <p className="text-xs text-blue-600 mb-3">Neomejeni zaposleni, admin nadzorna plošča in izvoz poročil.</p>
-    <a href="/registracija?paket=poslovni" className="inline-block bg-blue-600 text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">
-      Nadgradi za 24,99 €/mes →
-    </a>
-  </div>
-)}
-
-{profil?.paket === 'poslovni' && (
   <div className="mt-4 bg-green-50 border border-green-200 rounded-xl p-4">
     <p className="text-sm font-semibold text-green-800">Imate najboljši paket ✓</p>
     <p className="text-xs text-green-600 mt-1">Uživate v vseh funkcijah Veljavno.</p>
   </div>
 )}
+
           </div>
         </div>
 

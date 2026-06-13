@@ -111,7 +111,7 @@ const [pogoji, setPogoji] = useState(false)
           <select value={paket} onChange={e => setPaket(e.target.value)} className="w-full border border-input rounded-lg px-3 py-2 text-sm bg-background">
             <option value="samostojni">Samostojni — 4,99 € enkratno</option>
             <option value="druzinski">Družinski — 9,99 € enkratno</option>
-            <option value="poslovni">Poslovni — 24,99 € / mesec</option>
+            
           </select>
         </div>
 

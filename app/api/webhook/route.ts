@@ -14,7 +14,6 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 const paketImena: Record<string, string> = {
   samostojni: 'Samostojni — 4,99 €',
   druzinski: 'Družinski — 9,99 €',
-  poslovni: 'Poslovni — 24,99 € / mesec',
 }
 
 export async function POST(request: Request) {
@@ -48,8 +47,8 @@ export async function POST(request: Request) {
     }
 
     if (email && paket) {
-      const znesek = paket === 'samostojni' ? '4,99 €' : paket === 'druzinski' ? '9,99 €' : '24,99 €'
-      const tip = paket === 'poslovni' ? 'mesečna naročnina' : 'enkratno plačilo'
+      const znesek = paket === 'samostojni' ? '4,99 €' : '9,99 €'
+      const tip = 'enkratno plačilo'
 
       await resend.emails.send({
         from: 'Veljavno <opomniki@veljavno.si>',

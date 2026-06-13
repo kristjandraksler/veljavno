@@ -26,14 +26,6 @@ const plans = [
     popular: true,
     variant: 'druzinski',
   },
-  {
-    name: 'Poslovni',
-    price: '24,99 €',
-    cadence: '/ mesec',
-    features: ['Neomejeni zaposleni', 'Neomejeni dokumenti', 'E-mail opomniki', 'Admin nadzorna plošča', 'Izvoz poročil'],
-    popular: false,
-    variant: 'poslovni',
-  },
 ];
 
 const steps = [
@@ -161,12 +153,12 @@ export default function Home() {
             <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm text-muted-foreground shadow-sm">
               <span className="h-2 w-2 rounded-full bg-primary" /> Sistem za pravočasne opomnike
             </div>
-            <h1 className="max-w-6xl font-display text-5xl font-bold leading-[1.05] tracking-[-0.06em] text-foreground md:text-8xl lg:text-[7.4rem]">
-              Nikoli več potekle vozniške ali osebne izkaznice
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg leading-[1.65] text-muted-foreground md:text-xl">
-              Vnesite datume poteka svojih dokumentov in prejmite e-mail opomnik pravočasno.
-            </p>
+           <h1 className="max-w-6xl font-display text-5xl font-bold leading-[1.05] tracking-[-0.06em] text-foreground md:text-8xl lg:text-[7.4rem]">
+  Vsi vaši dokumenti. Vedno veljavni.
+</h1>
+<p className="mt-8 max-w-2xl text-lg leading-[1.65] text-muted-foreground md:text-xl">
+  Vozniško, osebna, potni list — dodajte datume poteka in prejmite e-mail opomnik preden je prepozno.
+</p>
             <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
               <Button onClick={scrollToPackages} size="lg" className="group relative overflow-hidden rounded-full px-8 py-7 text-sm font-semibold uppercase tracking-[0.16em] shadow-xl shadow-primary/20 focus:ring-4 focus:ring-primary focus:ring-offset-2">
                 <span className="absolute inset-y-0 -left-8 w-px bg-primary-foreground/70 transition-all duration-700 group-hover:left-[115%]" />
@@ -228,18 +220,18 @@ export default function Home() {
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-primary">Paketi</p>
             <h2 className="font-display text-4xl font-bold tracking-[-0.04em] md:text-6xl">Izberite paket, ki varuje vaše roke.</h2>
           </div>
-          <div className="grid gap-6 lg:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
             {plans.map((plan) => (
-              <motion.div key={plan.name} whileHover={{ y: -8 }} className={`relative rounded-[2rem] border p-8 backdrop-blur-xl transition-all ${plan.variant === 'druzinski' ? 'border-primary bg-card shadow-2xl shadow-primary/15' : plan.variant === 'poslovni' ? 'border-border bg-secondary/70' : 'border-border bg-card/80'}`}>
+              <motion.div key={plan.name} whileHover={{ y: -8 }} className={`relative rounded-[2rem] border p-10 backdrop-blur-xl transition-all ${plan.variant === 'druzinski' ? 'border-primary bg-card shadow-2xl shadow-primary/15' : 'border-border bg-card/80'}`}>
                 {plan.popular && (
                   <div className="rounded-full bg-green-500 px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-white inline-block mb-3">Najpopularnejši</div>
                 )}
                 <h3 className="text-2xl font-bold">{plan.name}</h3>
-                <div className="mt-8 flex items-end gap-2">
+                <div className="mt-6 flex items-end gap-2">
                   <span className="font-display text-5xl font-bold tracking-[-0.05em]">{plan.price}</span>
                   <span className="pb-2 text-muted-foreground">{plan.cadence}</span>
                 </div>
-                <ul className="mt-9 space-y-4">
+                <ul className="mt-8 space-y-4">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-3 text-lg text-muted-foreground">
                       <Check className="mt-1 h-5 w-5 flex-none text-primary" /> {feature}
@@ -309,31 +301,31 @@ export default function Home() {
                 </svg>
                 <div className="flex flex-col">
                   <span className="font-display text-lg font-bold text-white">VELJAVNO</span>
-                  <span className="text-xs text-slate-400">Sistem za pravočasne opomnike</span>
+                  <span className="text-xs text-slate-300">Sistem za pravočasne opomnike</span>
                   <div className="w-8 h-0.5 bg-blue-400 mt-1" />
                 </div>
               </a>
-              <p className="text-sm text-slate-400 max-w-xs">Nikoli več potekle vozniške ali osebne izkaznice.</p>
+              <p className="text-sm text-slate-300 max-w-xs">Nikoli več potekle vozniške ali osebne izkaznice.</p>
             </div>
 
             <div className="flex flex-col gap-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 mb-1">Aplikacija</p>
-              <a href="/registracija" className="text-sm text-slate-300 hover:text-white transition-colors">Registracija</a>
-              <a href="/prijava" className="text-sm text-slate-300 hover:text-white transition-colors">Prijava</a>
-              <a href="/dashboard" className="text-sm text-slate-300 hover:text-white transition-colors">Dashboard</a>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 mb-1">Aplikacija</p>
+              <a href="/registracija" className="text-sm text-slate-200 hover:text-white transition-colors">Registracija</a>
+              <a href="/prijava" className="text-sm text-slate-200 hover:text-white transition-colors">Prijava</a>
+              <a href="/dashboard" className="text-sm text-slate-200 hover:text-white transition-colors">Dashboard</a>
             </div>
 
             <div className="flex flex-col gap-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 mb-1">Pravno</p>
-              <a href="/pogoji" className="text-sm text-slate-300 hover:text-white transition-colors">Splošni pogoji</a>
-              <a href="/zasebnost" className="text-sm text-slate-300 hover:text-white transition-colors">Zasebnost</a>
-              <a href="mailto:info@veljavno.si" className="text-sm text-slate-300 hover:text-white transition-colors">Kontakt</a>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 mb-1">Pravno</p>
+              <a href="/pogoji" className="text-sm text-slate-200 hover:text-white transition-colors">Splošni pogoji</a>
+              <a href="/zasebnost" className="text-sm text-slate-200 hover:text-white transition-colors">Zasebnost</a>
+              <a href="mailto:info@veljavno.si" className="text-sm text-slate-200 hover:text-white transition-colors">Kontakt</a>
             </div>
           </div>
 
-          <div className="border-t border-slate-800 mt-10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
-            <p className="text-xs text-slate-500">© 2026 Veljavno. Vse pravice pridržane.</p>
-            <p className="text-xs text-slate-500">Narejeno v Sloveniji 🇸🇮</p>
+          <div className="border-t border-slate-700 mt-10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <p className="text-xs text-slate-400">© 2026 Veljavno. Vse pravice pridržane.</p>
+            <p className="text-xs text-slate-400">Narejeno v Sloveniji 🇸🇮</p>
           </div>
         </div>
       </footer>

@@ -3,9 +3,8 @@ import { Resend } from 'resend'
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 const paketImena: Record<string, string> = {
-  samostojni: 'Samostojni',
-  druzinski: 'Družinski',
-  poslovni: 'Poslovni',
+  samostojni: 'Samostojni — 4,99 €',
+  druzinski: 'Družinski — 9,99 €',
 }
 
 export async function POST(request: Request) {
