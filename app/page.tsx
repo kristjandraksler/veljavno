@@ -248,12 +248,16 @@ export default function Home() {
       </section>
 
       <footer className="border-t border-border py-10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between md:px-8">
-          <div className="font-display text-lg font-bold text-foreground">Veljavno</div>
-          <div>© 2026 Veljavno</div>
-          <a href="mailto:kontakt@veljavno.si" className="transition-colors hover:text-primary focus:outline-none focus:ring-4 focus:ring-primary focus:ring-offset-2">kontakt@veljavno.si</a>
-        </div>
-      </footer>
+  <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between md:px-8">
+    <div className="font-display text-lg font-bold text-foreground">Veljavno</div>
+    <div className="flex gap-6">
+      <a href="/pogoji" className="hover:text-primary transition-colors">Splošni pogoji</a>
+      <a href="/zasebnost" className="hover:text-primary transition-colors">Zasebnost</a>
+      <a href="mailto:info@veljavno.si" className="hover:text-primary transition-colors">Kontakt</a>
+    </div>
+    <div>© 2026 Veljavno</div>
+  </div>
+</footer>
     </main>
   );
 }
