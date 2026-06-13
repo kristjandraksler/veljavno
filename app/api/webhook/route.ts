@@ -1,5 +1,6 @@
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
+import { Resend } from 'resend'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
@@ -7,6 +8,14 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
+
+const resend = new Resend(process.env.RESEND_API_KEY)
+
+const paketImena: Record<string, string> = {
+  samostojni: 'Samostojni — 4,99 €',
+  druzinski: 'Družinski — 9,99 €',
+  poslovni: 'Poslovni — 24,99 € / mesec',
+}
 
 export async function POST(request: Request) {
   const body = await request.text()
@@ -29,12 +38,58 @@ export async function POST(request: Request) {
 
     const userId = session.metadata?.userId
     const paket = session.metadata?.paket
+    const email = session.customer_email
 
     if (userId && paket) {
       await supabase
         .from('profiles')
         .update({ paket, placilo_potrjeno: true })
         .eq('id', userId)
+    }
+
+    if (email && paket) {
+      const znesek = paket === 'samostojni' ? '4,99 €' : paket === 'druzinski' ? '9,99 €' : '24,99 €'
+      const tip = paket === 'poslovni' ? 'mesečna naročnina' : 'enkratno plačilo'
+
+      await resend.emails.send({
+        from: 'Veljavno <opomniki@veljavno.si>',
+        to: email,
+        subject: '✅ Potrdilo o plačilu — Veljavno',
+        html: `
+          <div style="font-family: Inter, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+            
+            <div style="background: #2563eb; border-radius: 12px; padding: 24px 32px; margin-bottom: 32px;">
+              <span style="color: white; font-size: 18px; font-weight: 700; letter-spacing: 0.08em;">VELJAVNO</span>
+            </div>
+
+            <h1 style="font-size: 24px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Plačilo potrjeno!</h1>
+            <p style="color: #64748b; font-size: 16px; margin-bottom: 32px;">Hvala za zaupanje. Vaš račun je aktiviran.</p>
+
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+              <p style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #16a34a; margin: 0 0 12px;">Podrobnosti plačila</p>
+              <table style="width: 100%; font-size: 14px;">
+                <tr>
+                  <td style="color: #64748b; padding: 4px 0;">Paket</td>
+                  <td style="text-align: right; font-weight: 600; color: #0f172a;">${paketImena[paket] || paket}</td>
+                </tr>
+                <tr>
+                  <td style="color: #64748b; padding: 4px 0;">Znesek</td>
+                  <td style="text-align: right; font-weight: 600; color: #0f172a;">${znesek}</td>
+                </tr>
+                <tr>
+                  <td style="color: #64748b; padding: 4px 0;">Tip</td>
+                  <td style="text-align: right; font-weight: 600; color: #0f172a;">${tip}</td>
+                </tr>
+              </table>
+            </div>
+
+            <a href="https://veljavno.si/dashboard" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 14px;">Odpri dashboard →</a>
+
+            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 32px 0;" />
+            <p style="color: #94a3b8; font-size: 12px;">Veljavno — Sistem za pravočasne opomnike</p>
+          </div>
+        `
+      })
     }
   }
 
