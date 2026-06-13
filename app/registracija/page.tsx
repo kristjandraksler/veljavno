@@ -14,8 +14,8 @@ function RegistracijaForm() {
   const [geslo, setGeslo] = useState('')
   const [paket, setPaket] = useState('samostojni')
   const [napaka, setNapaka] = useState('')
-  const [loading, setLoading] = useState(false)
-
+const [loading, setLoading] = useState(false)
+const [pogoji, setPogoji] = useState(false)
   useEffect(() => {
     const paketParam = searchParams.get('paket')
     if (paketParam) setPaket(paketParam)
@@ -117,9 +117,16 @@ function RegistracijaForm() {
 
         {napaka && <p className="text-red-500 text-sm">{napaka}</p>}
 
-        <Button type="submit" disabled={loading} className="mt-2 rounded-full py-6 text-xs font-semibold uppercase tracking-[0.16em]">
-          {loading ? 'Ustvarjam račun...' : 'Ustvari račun'}
-        </Button>
+        <div className="flex items-start gap-3">
+  <input type="checkbox" id="pogoji" checked={pogoji} onChange={e => setPogoji(e.target.checked)} className="w-4 h-4 mt-0.5 cursor-pointer" required />
+  <label htmlFor="pogoji" className="text-sm text-muted-foreground cursor-pointer">
+    Strinjam se s <a href="/pogoji" target="_blank" className="text-primary hover:underline">splošnimi pogoji</a> in <a href="/zasebnost" target="_blank" className="text-primary hover:underline">politiko zasebnosti</a>
+  </label>
+</div>
+
+<Button type="submit" disabled={loading || !pogoji} className="mt-2 rounded-full py-6 text-xs font-semibold uppercase tracking-[0.16em]">
+  {loading ? 'Ustvarjam račun...' : 'Ustvari račun'}
+</Button>
       </form>
     </div>
   )

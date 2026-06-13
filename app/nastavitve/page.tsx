@@ -25,20 +25,25 @@ export default function Nastavitve() {
   const [gesloLoading, setGesloLoading] = useState(false)
 
   useEffect(() => {
-    supabase.auth.getUser().then(async ({ data }) => {
-      if (!data.user) { router.push('/prijava'); return }
-      setUser(data.user)
+  supabase.auth.getUser().then(async ({ data }) => {
+    if (!data.user) { router.push('/prijava'); return }
 
-      const { data: profilData } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', data.user.id)
-        .single()
+    const { data: profilData } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', data.user.id)
+      .single()
 
-      setProfil(profilData)
-      setLoading(false)
-    })
-  }, [])
+    if (!profilData?.placilo_potrjeno) {
+      router.push('/registracija')
+      return
+    }
+
+    setUser(data.user)
+    setProfil(profilData)
+    setLoading(false)
+  })
+}, [])
 
   async function spremembaGesla(e: React.FormEvent) {
     e.preventDefault()
