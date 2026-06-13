@@ -255,7 +255,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="cakalna-lista" className="bg-foreground py-24 text-background md:py-36">
+      <section id="cakalna-lista" className="bg-slate-900 py-24 text-white md:py-36">
         <div className="mx-auto grid max-w-7xl gap-12 px-5 md:grid-cols-12 md:px-8">
           <div className="md:col-span-6">
             <p className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-blue-200">Novice</p>
@@ -293,7 +293,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="bg-foreground text-background mt-20">
+      <footer className="bg-slate-900 text-white mt-20">
         <div className="mx-auto max-w-7xl px-5 md:px-8 py-12">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
             <div>
