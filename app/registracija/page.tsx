@@ -46,6 +46,13 @@ function RegistracijaForm() {
         ime,
         paket,
       })
+
+      await fetch('/api/welcome', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, ime, paket })
+      })
+
       router.push('/dashboard')
     }
 
