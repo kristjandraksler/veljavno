@@ -62,10 +62,7 @@ function ProgressBar({ dni }: { dni: number }) {
 
   return (
     <div className="w-full h-1.5 bg-muted rounded-full mt-2">
-      <div
-        className={`h-1.5 rounded-full transition-all ${color}`}
-        style={{ width: `${percent}%` }}
-      />
+      <div className={`h-1.5 rounded-full transition-all ${color}`} style={{ width: `${percent}%` }} />
     </div>
   )
 }
@@ -79,6 +76,7 @@ export default function Dashboard() {
   const [editDoc, setEditDoc] = useState<Dokument | null>(null)
   const [deleteDoc, setDeleteDoc] = useState<Dokument | null>(null)
   const [sortiranje, setSortiranje] = useState<'datum' | 'ime'>('datum')
+  const [iskanje, setIskanje] = useState('')
 
   const [imeDoc, setImeDoc] = useState('')
   const [datumDoc, setDatumDoc] = useState('')
@@ -88,18 +86,8 @@ export default function Dashboard() {
   useEffect(() => {
     supabase.auth.getUser().then(async ({ data }) => {
       if (!data.user) { router.push('/prijava'); return }
-
-      const { data: profil } = await supabase
-        .from('profiles')
-        .select('placilo_potrjeno')
-        .eq('id', data.user.id)
-        .single()
-
-      if (!profil?.placilo_potrjeno) {
-        router.push('/registracija')
-        return
-      }
-
+      const { data: profil } = await supabase.from('profiles').select('placilo_potrjeno').eq('id', data.user.id).single()
+      if (!profil?.placilo_potrjeno) { router.push('/registracija'); return }
       setUser(data.user)
       naloziDokumente(data.user.id)
     })
@@ -114,32 +102,14 @@ export default function Dashboard() {
   async function shraniDokument(e: React.FormEvent) {
     e.preventDefault()
     if (!user) return
-
     if (editDoc) {
-      await supabase.from('documents').update({
-        ime: imeDoc,
-        datum_poteka: datumDoc,
-        opomniki: izbraniOpomniki,
-        lastnik: lastnikDoc,
-      }).eq('id', editDoc.id)
+      await supabase.from('documents').update({ ime: imeDoc, datum_poteka: datumDoc, opomniki: izbraniOpomniki, lastnik: lastnikDoc }).eq('id', editDoc.id)
       toast.success('Dokument posodobljen!')
     } else {
-      await supabase.from('documents').insert({
-        user_id: user.id,
-        ime: imeDoc,
-        datum_poteka: datumDoc,
-        opomniki: izbraniOpomniki,
-        lastnik: lastnikDoc,
-      })
+      await supabase.from('documents').insert({ user_id: user.id, ime: imeDoc, datum_poteka: datumDoc, opomniki: izbraniOpomniki, lastnik: lastnikDoc })
       toast.success('Dokument dodan!')
     }
-
-    setShowForm(false)
-    setEditDoc(null)
-    setImeDoc('')
-    setDatumDoc('')
-    setLastnikDoc('')
-    setIzbraniOpomniki([30, 90])
+    setShowForm(false); setEditDoc(null); setImeDoc(''); setDatumDoc(''); setLastnikDoc(''); setIzbraniOpomniki([30, 90])
     naloziDokumente(user.id)
   }
 
@@ -152,18 +122,11 @@ export default function Dashboard() {
   }
 
   function urediDokument(doc: Dokument) {
-    setEditDoc(doc)
-    setImeDoc(doc.ime)
-    setDatumDoc(doc.datum_poteka)
-    setLastnikDoc(doc.lastnik || '')
-    setIzbraniOpomniki(doc.opomniki || [30, 90])
-    setShowForm(true)
+    setEditDoc(doc); setImeDoc(doc.ime); setDatumDoc(doc.datum_poteka); setLastnikDoc(doc.lastnik || ''); setIzbraniOpomniki(doc.opomniki || [30, 90]); setShowForm(true)
   }
 
   function toggleOpomnik(vrednost: number) {
-    setIzbraniOpomniki(prev =>
-      prev.includes(vrednost) ? prev.filter(v => v !== vrednost) : [...prev, vrednost]
-    )
+    setIzbraniOpomniki(prev => prev.includes(vrednost) ? prev.filter(v => v !== vrednost) : [...prev, vrednost])
   }
 
   async function odjava() {
@@ -171,19 +134,19 @@ export default function Dashboard() {
     router.push('/')
   }
 
+  const sortiraneDokumenti = [...dokumenti]
+    .filter(d => d.ime.toLowerCase().includes(iskanje.toLowerCase()) || (d.lastnik || '').toLowerCase().includes(iskanje.toLowerCase()))
+    .sort((a, b) => {
+      if (sortiranje === 'ime') return a.ime.localeCompare(b.ime)
+      return new Date(a.datum_poteka).getTime() - new Date(b.datum_poteka).getTime()
+    })
+
   function izvozCSV() {
     const headers = ['Ime dokumenta', 'Lastnik', 'Datum poteka', 'Dni do poteka', 'Opomniki']
     const vrstice = sortiraneDokumenti.map(doc => {
       const dni = getDniDo(doc.datum_poteka)
-      return [
-        doc.ime,
-        doc.lastnik || '',
-        new Date(doc.datum_poteka).toLocaleDateString('sl-SI'),
-        dni.toString(),
-        (doc.opomniki || []).map(o => OPOMNIKI.find(op => op.vrednost === o)?.oznaka).filter(Boolean).join(' | ')
-      ]
+      return [doc.ime, doc.lastnik || '', new Date(doc.datum_poteka).toLocaleDateString('sl-SI'), dni.toString(), (doc.opomniki || []).map(o => OPOMNIKI.find(op => op.vrednost === o)?.oznaka).filter(Boolean).join(' | ')]
     })
-
     const csv = [headers, ...vrstice].map(v => v.map(c => `"${c}"`).join(',')).join('\n')
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     const url = URL.createObjectURL(blob)
@@ -194,11 +157,6 @@ export default function Dashboard() {
     URL.revokeObjectURL(url)
     toast.success('Dokumenti izvoženi!')
   }
-
-  const sortiraneDokumenti = [...dokumenti].sort((a, b) => {
-    if (sortiranje === 'ime') return a.ime.localeCompare(b.ime)
-    return new Date(a.datum_poteka).getTime() - new Date(b.datum_poteka).getTime()
-  })
 
   if (loading) return (
     <main className="min-h-screen bg-background">
@@ -222,14 +180,10 @@ export default function Dashboard() {
           <div className="w-36 h-9 bg-muted rounded-full animate-pulse" />
         </div>
         <div className="grid grid-cols-3 gap-4 mb-8">
-          {[1,2,3].map(i => (
-            <div key={i} className="rounded-2xl p-4 border border-border animate-pulse bg-muted h-20" />
-          ))}
+          {[1,2,3].map(i => <div key={i} className="rounded-2xl p-4 border border-border animate-pulse bg-muted h-20" />)}
         </div>
         <div className="flex flex-col gap-4">
-          {[1,2,3].map(i => (
-            <div key={i} className="bg-muted border border-border rounded-2xl p-6 h-24 animate-pulse" />
-          ))}
+          {[1,2,3].map(i => <div key={i} className="bg-muted border border-border rounded-2xl p-6 h-24 animate-pulse" />)}
         </div>
       </div>
     </main>
@@ -274,6 +228,19 @@ export default function Dashboard() {
             </Button>
           </div>
           <div className="flex items-center gap-3 flex-wrap">
+            <div className="flex items-center gap-2 border border-border rounded-full px-3 py-2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" value={iskanje} onChange={e => setIskanje(e.target.value)} placeholder="Išči dokumente..." className="text-xs bg-transparent outline-none text-foreground placeholder:text-muted-foreground w-36" />
+              {iskanje && (
+                <button onClick={() => setIskanje('')} className="text-muted-foreground hover:text-foreground">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+              )}
+            </div>
             <div className="flex items-center gap-2 border border-border rounded-full px-3 py-2 w-fit">
               <span className="text-xs text-muted-foreground">Sortiraj:</span>
               <select value={sortiranje} onChange={e => setSortiranje(e.target.value as 'datum' | 'ime')} className="text-xs bg-transparent text-muted-foreground outline-none cursor-pointer">
@@ -291,6 +258,22 @@ export default function Dashboard() {
             )}
           </div>
         </div>
+
+        {dokumenti.filter(d => getDniDo(d.datum_poteka) <= 30).length > 0 && (
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-4 mb-6 flex items-center gap-3">
+            <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-red-700">
+                {dokumenti.filter(d => getDniDo(d.datum_poteka) <= 30).length === 1 ? 'En dokument poteče v manj kot 30 dneh!' : `${dokumenti.filter(d => getDniDo(d.datum_poteka) <= 30).length} dokumenti potečejo v manj kot 30 dneh!`}
+              </p>
+              <p className="text-xs text-red-500 mt-0.5">Preverite in pravočasno podaljšajte.</p>
+            </div>
+          </div>
+        )}
 
         {dokumenti.length > 0 && (
           <div className="grid grid-cols-3 gap-4 mb-8">
@@ -316,12 +299,7 @@ export default function Dashboard() {
               <div className="flex flex-wrap gap-2 mb-4">
                 <p className="text-xs text-muted-foreground w-full mb-1">Hitri vnos:</p>
                 {HITRI_VNOS.map(ime => (
-                  <button
-                    key={ime}
-                    type="button"
-                    onClick={() => setImeDoc(ime)}
-                    className={`text-xs border rounded-full px-3 py-1.5 transition-colors ${imeDoc === ime ? 'border-primary text-primary bg-primary/5' : 'border-border text-muted-foreground hover:bg-secondary'}`}
-                  >
+                  <button key={ime} type="button" onClick={() => setImeDoc(ime)} className={`text-xs border rounded-full px-3 py-1.5 transition-colors ${imeDoc === ime ? 'border-primary text-primary bg-primary/5' : 'border-border text-muted-foreground hover:bg-secondary'}`}>
                     {ime}
                   </button>
                 ))}
@@ -393,27 +371,34 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="flex flex-col gap-4">
-            {sortiraneDokumenti.map(doc => {
-              const dni = getDniDo(doc.datum_poteka)
-              return (
-                <div key={doc.id} className={`bg-card border rounded-2xl p-6 flex items-center justify-between gap-4 flex-wrap ${dni <= 30 ? 'border-red-200' : dni <= 90 ? 'border-orange-200' : 'border-border'}`}>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 mb-1">
-                      <h3 className="font-semibold">{doc.ime}</h3>
-                      <StatusBadge dni={dni} />
+            {sortiraneDokumenti.length === 0 && iskanje ? (
+              <div className="text-center py-12 text-muted-foreground">
+                <p className="text-sm">Ni rezultatov za iskanje "{iskanje}"</p>
+                <button onClick={() => setIskanje('')} className="text-xs text-primary hover:underline mt-2">Počisti iskanje</button>
+              </div>
+            ) : (
+              sortiraneDokumenti.map(doc => {
+                const dni = getDniDo(doc.datum_poteka)
+                return (
+                  <div key={doc.id} className={`bg-card border rounded-2xl p-6 flex items-center justify-between gap-4 flex-wrap ${dni <= 30 ? 'border-red-200' : dni <= 90 ? 'border-orange-200' : 'border-border'}`}>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3 mb-1">
+                        <h3 className="font-semibold">{doc.ime}</h3>
+                        <StatusBadge dni={dni} />
+                      </div>
+                      {doc.lastnik && <p className="text-xs text-muted-foreground mb-1">👤 {doc.lastnik}</p>}
+                      <p className="text-sm text-muted-foreground">Poteče: {new Date(doc.datum_poteka).toLocaleDateString('sl-SI')}</p>
+                      <p className="text-xs text-muted-foreground mt-1">Opomniki: {(doc.opomniki || []).map(o => OPOMNIKI.find(op => op.vrednost === o)?.oznaka).filter(Boolean).join(', ') || 'Ni nastavljenih'}</p>
+                      <ProgressBar dni={dni} />
                     </div>
-                    {doc.lastnik && <p className="text-xs text-muted-foreground mb-1">👤 {doc.lastnik}</p>}
-                    <p className="text-sm text-muted-foreground">Poteče: {new Date(doc.datum_poteka).toLocaleDateString('sl-SI')}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Opomniki: {(doc.opomniki || []).map(o => OPOMNIKI.find(op => op.vrednost === o)?.oznaka).filter(Boolean).join(', ') || 'Ni nastavljenih'}</p>
-                    <ProgressBar dni={dni} />
+                    <div className="flex gap-2">
+                      <Button variant="outline" onClick={() => urediDokument(doc)} className="rounded-full text-xs px-4">Uredi</Button>
+                      <Button variant="outline" onClick={() => setDeleteDoc(doc)} className="rounded-full text-xs px-4 text-red-500 border-red-200 hover:bg-red-50">Izbriši</Button>
+                    </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" onClick={() => urediDokument(doc)} className="rounded-full text-xs px-4">Uredi</Button>
-                    <Button variant="outline" onClick={() => setDeleteDoc(doc)} className="rounded-full text-xs px-4 text-red-500 border-red-200 hover:bg-red-50">Izbriši</Button>
-                  </div>
-                </div>
-              )
-            })}
+                )
+              })
+            )}
           </div>
         )}
       </div>
