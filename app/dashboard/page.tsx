@@ -5,6 +5,15 @@ import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 
 type Dokument = {
   id: string
@@ -44,6 +53,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editDoc, setEditDoc] = useState<Dokument | null>(null)
+  const [deleteDoc, setDeleteDoc] = useState<Dokument | null>(null)
 
   const [imeDoc, setImeDoc] = useState('')
   const [datumDoc, setDatumDoc] = useState('')
@@ -85,6 +95,7 @@ export default function Dashboard() {
         datum_poteka: datumDoc,
         opomniki: izbraniOpomniki,
       }).eq('id', editDoc.id)
+      toast.success('Dokument posodobljen!')
     } else {
       await supabase.from('documents').insert({
         user_id: user.id,
@@ -92,6 +103,7 @@ export default function Dashboard() {
         datum_poteka: datumDoc,
         opomniki: izbraniOpomniki,
       })
+      toast.success('Dokument dodan!')
     }
 
     setShowForm(false)
@@ -102,8 +114,11 @@ export default function Dashboard() {
     naloziDokumente(user.id)
   }
 
-  async function izbrisiDokument(id: string) {
-    await supabase.from('documents').delete().eq('id', id)
+  async function izbrisiDokument() {
+    if (!deleteDoc) return
+    await supabase.from('documents').delete().eq('id', deleteDoc.id)
+    setDeleteDoc(null)
+    toast.success('Dokument izbrisan!')
     naloziDokumente(user.id)
   }
 
@@ -263,7 +278,7 @@ export default function Dashboard() {
                   </div>
                   <div className="flex gap-2">
                     <Button variant="outline" onClick={() => urediDokument(doc)} className="rounded-full text-xs px-4">Uredi</Button>
-                    <Button variant="outline" onClick={() => izbrisiDokument(doc.id)} className="rounded-full text-xs px-4 text-red-500 border-red-200 hover:bg-red-50">Izbriši</Button>
+                    <Button variant="outline" onClick={() => setDeleteDoc(doc)} className="rounded-full text-xs px-4 text-red-500 border-red-200 hover:bg-red-50">Izbriši</Button>
                   </div>
                 </div>
               )
@@ -271,6 +286,22 @@ export default function Dashboard() {
           </div>
         )}
       </div>
+
+      {/* Potrditveni dialog za brisanje */}
+      <Dialog open={!!deleteDoc} onOpenChange={() => setDeleteDoc(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Izbriši dokument</DialogTitle>
+            <DialogDescription>
+              Ali ste prepričani da želite izbrisati <strong>{deleteDoc?.ime}</strong>? Tega dejanja ni mogoče razveljaviti.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteDoc(null)} className="rounded-full text-xs font-semibold uppercase tracking-[0.16em]">Prekliči</Button>
+            <Button onClick={izbrisiDokument} className="rounded-full text-xs font-semibold uppercase tracking-[0.16em] bg-red-500 hover:bg-red-600">Izbriši</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <a href="/nastavitve" className="fixed bottom-6 right-6 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-primary/90 transition-all hover:-translate-y-1" aria-label="Nastavitve">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

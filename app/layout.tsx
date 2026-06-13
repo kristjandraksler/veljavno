@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { Toaster } from "@/components/ui/sonner";
 import CookieBanner from "@/components/cookie-banner";
 import "./globals.css";
 
@@ -11,7 +12,7 @@ const geist = Geist({
 
 export const metadata: Metadata = {
   title: "Veljavno — Sistem za pravočasne opomnike",
-  description: "Nikoli več potekle vozniške ali osebne izkaznice. Vnesite datume poteka svojih dokumentov in prejmite e-mail opomnik pravočasno.",
+  description: "Vozniško, osebna, potni list — dodajte datume poteka in prejmite e-mail opomnik preden je prepozno.",
 };
 
 export default function RootLayout({
@@ -23,10 +24,11 @@ export default function RootLayout({
     <html lang="sl" suppressHydrationWarning className={`${geist.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
-  {children}
-  <CookieBanner />
-</ThemeProvider>
+          {children}
+          <Toaster richColors position="top-right" />
+          <CookieBanner />
+        </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }
