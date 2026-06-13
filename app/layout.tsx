@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import CookieBanner from "@/components/cookie-banner";
 import "./globals.css";
 
 const geist = Geist({
@@ -22,8 +23,9 @@ export default function RootLayout({
     <html lang="sl" suppressHydrationWarning className={`${geist.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
-          {children}
-        </ThemeProvider>
+  {children}
+  <CookieBanner />
+</ThemeProvider>
       </body>
     </html>
   );
