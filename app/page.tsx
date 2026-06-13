@@ -92,8 +92,8 @@ export default function Home() {
             </svg>
             <div className="flex flex-col">
               <span className="font-display text-xl font-bold tracking-[0.08em] leading-tight">VELJAVNO</span>
-              <span className="text-xs text-muted-foreground hidden md:block">Sistem za pravočasne opomnike</span>
-              <div className="w-8 h-0.5 bg-primary mt-1 hidden md:block" />
+              <span className="text-xs text-muted-foreground">Sistem za pravočasne opomnike</span>
+              <div className="w-8 h-0.5 bg-primary mt-1" />
             </div>
           </a>
 
@@ -267,17 +267,52 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="border-t border-border py-10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between md:px-8">
-          <div className="font-display text-lg font-bold text-foreground">Veljavno</div>
-          <div className="flex gap-6">
-            <a href="/pogoji" className="hover:text-primary transition-colors">Splošni pogoji</a>
-            <a href="/zasebnost" className="hover:text-primary transition-colors">Zasebnost</a>
-            <a href="mailto:info@veljavno.si" className="hover:text-primary transition-colors">Kontakt</a>
+      <footer className="bg-foreground text-background mt-20">
+  <div className="mx-auto max-w-7xl px-5 md:px-8 py-12">
+    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
+      
+      <div>
+        <a href="/" className="flex items-center gap-2 mb-3">
+          <svg width="28" height="34" viewBox="0 0 60 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="60" height="72" rx="10" fill="#2563eb"/>
+  <rect x="10" y="8" width="26" height="4" rx="2" fill="white" fillOpacity="0.5"/>
+  <rect x="10" y="17" width="40" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+  <rect x="10" y="26" width="32" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+  <rect x="10" y="35" width="36" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+  <circle cx="43" cy="56" r="14" fill="white"/>
+  <path d="M36 56 L41 61 L50 50" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+</svg>
+          <div className="flex flex-col">
+            <span className="font-display text-lg font-bold text-white">VELJAVNO</span>
+            <span className="text-xs text-slate-400">Sistem za pravočasne opomnike</span>
+            <div className="w-8 h-0.5 bg-blue-400 mt-1" />
           </div>
-          <div>© 2026 Veljavno</div>
-        </div>
-      </footer>
+        </a>
+        <p className="text-sm text-slate-400 max-w-xs">Nikoli več potekle vozniške ali osebne izkaznice.</p>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 mb-1">Aplikacija</p>
+        <a href="/registracija" className="text-sm text-slate-300 hover:text-white transition-colors">Registracija</a>
+        <a href="/prijava" className="text-sm text-slate-300 hover:text-white transition-colors">Prijava</a>
+        <a href="/dashboard" className="text-sm text-slate-300 hover:text-white transition-colors">Dashboard</a>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 mb-1">Pravno</p>
+        <a href="/pogoji" className="text-sm text-slate-300 hover:text-white transition-colors">Splošni pogoji</a>
+        <a href="/zasebnost" className="text-sm text-slate-300 hover:text-white transition-colors">Zasebnost</a>
+        <a href="mailto:info@veljavno.si" className="text-sm text-slate-300 hover:text-white transition-colors">Kontakt</a>
+      </div>
+
+    </div>
+
+    <div className="border-t border-slate-800 mt-10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <p className="text-xs text-slate-500">© 2026 Veljavno. Vse pravice pridržane.</p>
+      <p className="text-xs text-slate-500">Narejeno v Sloveniji 🇸🇮</p>
+    </div>
+  </div>
+</footer>
     </main>
   );
 }
