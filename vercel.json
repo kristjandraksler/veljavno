@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/opomniki",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}
