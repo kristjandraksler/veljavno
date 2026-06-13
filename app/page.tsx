@@ -170,23 +170,50 @@ export default function Home() {
             </div>
           </motion.div>
           <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.15 }} className="relative z-10 md:col-span-3 md:pt-24">
-            <div className="rounded-[2rem] border border-border bg-card/70 p-5 shadow-2xl shadow-primary/10 backdrop-blur-xl">
-              <div className="aspect-[4/5] rounded-[1.5rem] bg-gradient-to-br from-white via-secondary to-blue-100 p-6 shadow-inner">
-                <div className="h-full rounded-2xl border border-white/80 bg-white/65 p-5 backdrop-blur">
-                  <ShieldCheck className="mb-10 h-10 w-10 text-primary" />
-                  <div className="space-y-3">
-                    <div className="h-3 w-2/3 rounded-full bg-foreground/80" />
-                    <div className="h-3 w-1/2 rounded-full bg-muted-foreground/30" />
-                    <div className="mt-8 rounded-xl border border-primary/20 bg-primary/5 p-4">
-                      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-1">Dokument</p>
-                      <p className="text-sm font-bold text-foreground">Vozniško dovoljenje</p>
-                      <p className="mt-2 text-sm font-medium text-primary">Poteče čez 47 dni</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+  <div className="rounded-[2rem] border border-border bg-card/70 p-4 shadow-2xl shadow-primary/10 backdrop-blur-xl">
+    <div className="rounded-[1.5rem] bg-background border border-border overflow-hidden">
+      {/* Nav */}
+      <div className="border-b border-border px-4 py-3 flex items-center gap-2">
+        <div className="w-5 h-6 bg-primary rounded-md flex-shrink-0" />
+        <div className="h-2 w-16 bg-foreground/80 rounded-full" />
+      </div>
+      {/* Content */}
+      <div className="p-4 space-y-3">
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-2">
+          <div className="bg-red-50 border border-red-100 rounded-xl p-2 text-center">
+            <div className="text-lg font-bold text-red-600">1</div>
+            <div className="text-[9px] text-red-500">Kmalu</div>
+          </div>
+          <div className="bg-orange-50 border border-orange-100 rounded-xl p-2 text-center">
+            <div className="text-lg font-bold text-orange-600">2</div>
+            <div className="text-[9px] text-orange-500">Pozor</div>
+          </div>
+          <div className="bg-green-50 border border-green-100 rounded-xl p-2 text-center">
+            <div className="text-lg font-bold text-green-600">3</div>
+            <div className="text-[9px] text-green-500">Veljavni</div>
+          </div>
+        </div>
+        {/* Documents */}
+        {[
+          { ime: '🚗 Vozniško dovoljenje', dni: 23, color: 'border-red-200', badge: 'bg-red-100 text-red-600', badgeText: '23 dni', progress: 'bg-red-400', width: '6%' },
+          { ime: '🪪 Osebna izkaznica', dni: 67, color: 'border-orange-200', badge: 'bg-orange-100 text-orange-600', badgeText: '67 dni', progress: 'bg-orange-400', width: '18%' },
+          { ime: '🌍 Potni list', dni: 280, color: 'border-border', badge: 'bg-green-100 text-green-600', badgeText: '280 dni', progress: 'bg-green-400', width: '77%' },
+        ].map(doc => (
+          <div key={doc.ime} className={`bg-card border ${doc.color} rounded-xl p-3`}>
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-xs font-semibold">{doc.ime}</span>
+              <span className={`text-[9px] px-1.5 py-0.5 rounded-full ${doc.badge}`}>{doc.badgeText}</span>
             </div>
-          </motion.div>
+            <div className="w-full h-1 bg-muted rounded-full">
+              <div className={`h-1 rounded-full ${doc.progress}`} style={{ width: doc.width }} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</motion.div>
         </div>
       </section>
 
