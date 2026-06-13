@@ -55,6 +55,21 @@ function StatusBadge({ dni }: { dni: number }) {
   return <span className="text-xs px-2 py-1 rounded-full bg-green-100 text-green-600">Veljavno — {dni} dni</span>
 }
 
+function ProgressBar({ dni }: { dni: number }) {
+  const max = 365
+  const percent = Math.max(0, Math.min(100, (dni / max) * 100))
+  const color = dni <= 30 ? 'bg-red-400' : dni <= 90 ? 'bg-orange-400' : 'bg-green-400'
+
+  return (
+    <div className="w-full h-1.5 bg-muted rounded-full mt-2">
+      <div
+        className={`h-1.5 rounded-full transition-all ${color}`}
+        style={{ width: `${percent}%` }}
+      />
+    </div>
+  )
+}
+
 export default function Dashboard() {
   const router = useRouter()
   const [user, setUser] = useState<any>(null)
@@ -243,7 +258,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Statistike */}
         {dokumenti.length > 0 && (
           <div className="grid grid-cols-3 gap-4 mb-8">
             <div className="bg-red-50 border border-red-100 rounded-2xl p-4 text-center">
@@ -349,7 +363,7 @@ export default function Dashboard() {
               const dni = getDniDo(doc.datum_poteka)
               return (
                 <div key={doc.id} className={`bg-card border rounded-2xl p-6 flex items-center justify-between gap-4 flex-wrap ${dni <= 30 ? 'border-red-200' : dni <= 90 ? 'border-orange-200' : 'border-border'}`}>
-                  <div>
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-1">
                       <h3 className="font-semibold">{doc.ime}</h3>
                       <StatusBadge dni={dni} />
@@ -357,6 +371,7 @@ export default function Dashboard() {
                     {doc.lastnik && <p className="text-xs text-muted-foreground mb-1">👤 {doc.lastnik}</p>}
                     <p className="text-sm text-muted-foreground">Poteče: {new Date(doc.datum_poteka).toLocaleDateString('sl-SI')}</p>
                     <p className="text-xs text-muted-foreground mt-1">Opomniki: {(doc.opomniki || []).map(o => OPOMNIKI.find(op => op.vrednost === o)?.oznaka).filter(Boolean).join(', ') || 'Ni nastavljenih'}</p>
+                    <ProgressBar dni={dni} />
                   </div>
                   <div className="flex gap-2">
                     <Button variant="outline" onClick={() => urediDokument(doc)} className="rounded-full text-xs px-4">Uredi</Button>
