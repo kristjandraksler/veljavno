@@ -95,10 +95,10 @@ export default function Nastavitve() {
               <path d="M36 56 L41 61 L50 50" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             <div className="flex flex-col">
-              <span className="font-display text-lg font-bold tracking-[0.08em] leading-tight">VELJAVNO</span>
-              <span className="text-xs text-muted-foreground hidden md:block">Sistem za pravočasne opomnike</span>
-              <div className="w-8 h-0.5 bg-primary mt-1 hidden md:block" />
-            </div>
+  <span className="font-display text-lg font-bold tracking-[0.08em] leading-tight">VELJAVNO</span>
+  <span className="text-xs text-muted-foreground">Sistem za pravočasne opomnike</span>
+  <div className="w-8 h-0.5 bg-primary mt-1" />
+</div>
           </a>
           <Button variant="outline" onClick={odjava} className="rounded-full text-xs px-4 py-2">Odjava</Button>
         </div>

@@ -143,29 +143,29 @@ export default function Dashboard() {
               <path d="M36 56 L41 61 L50 50" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             <div className="flex flex-col">
-              <span className="font-display text-lg font-bold tracking-[0.08em] leading-tight">VELJAVNO</span>
-              <span className="text-xs text-muted-foreground hidden md:block">Sistem za pravočasne opomnike</span>
-              <div className="w-8 h-0.5 bg-primary mt-1 hidden md:block" />
-            </div>
+  <span className="font-display text-lg font-bold tracking-[0.08em] leading-tight">VELJAVNO</span>
+  <span className="text-xs text-muted-foreground">Sistem za pravočasne opomnike</span>
+  <div className="w-8 h-0.5 bg-primary mt-1" />
+</div>
           </a>
-          <div className="flex items-center gap-4">
+    <div className="flex items-center gap-4">
   <span className="text-sm text-muted-foreground hidden md:block">{user?.email}</span>
-  <a href="/nastavitve" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden md:block">Nastavitve</a>
+  
   <Button variant="outline" onClick={odjava} className="rounded-full text-xs px-4 py-2">Odjava</Button>
 </div>
         </div>
       </nav>
 
       <div className="max-w-5xl mx-auto px-6 py-10">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-2xl font-bold">Moji dokumenti</h1>
-            <p className="text-muted-foreground text-sm mt-1">{dokumenti.length} {dokumenti.length === 1 ? 'dokument' : 'dokumentov'}</p>
-          </div>
-          <Button onClick={() => { setShowForm(true); setEditDoc(null); setImeDoc(''); setDatumDoc(''); setIzbraniOpomniki([30, 90]) }} className="rounded-full text-xs font-semibold uppercase tracking-[0.16em]">
-            + Dodaj dokument
-          </Button>
-        </div>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+  <div>
+    <h1 className="text-2xl font-bold">Moji dokumenti</h1>
+    <p className="text-muted-foreground text-sm mt-1">{dokumenti.length} {dokumenti.length === 1 ? 'dokument' : 'dokumentov'}</p>
+  </div>
+  <Button onClick={() => { setShowForm(true); setEditDoc(null); setImeDoc(''); setDatumDoc(''); setIzbraniOpomniki([30, 90]) }} className="rounded-full text-xs font-semibold uppercase tracking-[0.16em] w-fit">
+    + Dodaj dokument
+  </Button>
+</div>
 
         {showForm && (
           <div className="bg-card border border-border rounded-2xl p-6 mb-6">
@@ -199,10 +199,37 @@ export default function Dashboard() {
         )}
 
         {dokumenti.length === 0 && !showForm ? (
-          <div className="text-center py-20 text-muted-foreground">
-            <p className="text-lg font-medium mb-2">Še nimate dokumentov</p>
-            <p className="text-sm">Dodajte prvi dokument in nastavite opomnike.</p>
-          </div>
+  <div className="text-center py-20">
+    <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
+      <svg width="36" height="44" viewBox="0 0 60 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="60" height="72" rx="10" fill="#2563eb"/>
+        <rect x="10" y="8" width="26" height="4" rx="2" fill="white" fillOpacity="0.5"/>
+        <rect x="10" y="17" width="40" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+        <rect x="10" y="26" width="32" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+        <rect x="10" y="35" width="36" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+        <circle cx="43" cy="56" r="14" fill="white"/>
+        <path d="M36 56 L41 61 L50 50" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    </div>
+    <h2 className="text-2xl font-bold mb-2">Dobrodošli v Veljavno!</h2>
+    <p className="text-muted-foreground mb-2">Začnite z dodajanjem vaših dokumentov.</p>
+    <p className="text-sm text-muted-foreground mb-8">Vozniško dovoljenje, osebna izkaznica, potni list — dodajte vse in nastavite opomnike.</p>
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-lg mx-auto mb-8">
+  {[
+    { ime: 'Vozniško dovoljenje', ikona: '🚗' },
+    { ime: 'Osebna izkaznica', ikona: '🪪' },
+    { ime: 'Potni list', ikona: '🌍' },
+  ].map(doc => (
+    <div key={doc.ime} className="bg-card border border-border rounded-xl px-4 py-3 text-sm text-muted-foreground flex items-center gap-2">
+      <span className="text-lg">{doc.ikona}</span>
+      <span>{doc.ime}</span>
+    </div>
+  ))}
+</div>
+    <Button onClick={() => setShowForm(true)} className="rounded-full text-xs font-semibold uppercase tracking-[0.16em] px-8">
+      + Dodaj prvi dokument
+    </Button>
+  </div>
         ) : (
           <div className="flex flex-col gap-4">
             {dokumenti.map(doc => {
@@ -227,6 +254,12 @@ export default function Dashboard() {
           </div>
         )}
       </div>
+      <a href="/nastavitve" className="fixed bottom-6 right-6 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-primary/90 transition-all hover:-translate-y-1" aria-label="Nastavitve">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+  </svg>
+</a>
     </main>
   )
 }
