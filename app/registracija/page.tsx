@@ -53,6 +53,12 @@ function RegistracijaForm() {
         body: JSON.stringify({ email, ime, paket })
       })
 
+      if (!data.user.email_confirmed_at) {
+        setLoading(false)
+        router.push('/potrdi-email')
+        return
+      }
+
       router.push('/dashboard')
     }
 
