@@ -59,7 +59,13 @@ function RegistracijaForm() {
         return
       }
 
-      router.push('/dashboard')
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paket, userId: data.user.id, email })
+      })
+      const { url } = await res.json()
+      window.location.href = url
     }
 
     setLoading(false)
