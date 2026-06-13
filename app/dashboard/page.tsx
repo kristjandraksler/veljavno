@@ -20,6 +20,7 @@ type Dokument = {
   ime: string
   datum_poteka: string
   opomniki: number[]
+  lastnik?: string
 }
 
 const OPOMNIKI = [
@@ -29,6 +30,14 @@ const OPOMNIKI = [
   { vrednost: 90, oznaka: '3 mesece prej' },
   { vrednost: 180, oznaka: '6 mesecev prej' },
   { vrednost: 365, oznaka: '1 leto prej' },
+]
+
+const HITRI_VNOS = [
+  '🚗 Vozniško dovoljenje',
+  '🪪 Osebna izkaznica',
+  '🌍 Potni list',
+  '🏥 Zdravstvena kartica',
+  '🚌 Prometno dovoljenje',
 ]
 
 function getDniDo(datum: string) {
@@ -58,6 +67,7 @@ export default function Dashboard() {
 
   const [imeDoc, setImeDoc] = useState('')
   const [datumDoc, setDatumDoc] = useState('')
+  const [lastnikDoc, setLastnikDoc] = useState('')
   const [izbraniOpomniki, setIzbraniOpomniki] = useState<number[]>([30, 90])
 
   useEffect(() => {
@@ -95,6 +105,7 @@ export default function Dashboard() {
         ime: imeDoc,
         datum_poteka: datumDoc,
         opomniki: izbraniOpomniki,
+        lastnik: lastnikDoc,
       }).eq('id', editDoc.id)
       toast.success('Dokument posodobljen!')
     } else {
@@ -103,6 +114,7 @@ export default function Dashboard() {
         ime: imeDoc,
         datum_poteka: datumDoc,
         opomniki: izbraniOpomniki,
+        lastnik: lastnikDoc,
       })
       toast.success('Dokument dodan!')
     }
@@ -111,6 +123,7 @@ export default function Dashboard() {
     setEditDoc(null)
     setImeDoc('')
     setDatumDoc('')
+    setLastnikDoc('')
     setIzbraniOpomniki([30, 90])
     naloziDokumente(user.id)
   }
@@ -127,6 +140,7 @@ export default function Dashboard() {
     setEditDoc(doc)
     setImeDoc(doc.ime)
     setDatumDoc(doc.datum_poteka)
+    setLastnikDoc(doc.lastnik || '')
     setIzbraniOpomniki(doc.opomniki || [30, 90])
     setShowForm(true)
   }
@@ -211,23 +225,23 @@ export default function Dashboard() {
 
       <div className="max-w-5xl mx-auto px-6 py-10">
         <div className="flex flex-col gap-4 mb-8">
-  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-  <div>
-    <h1 className="text-2xl font-bold">Moji dokumenti</h1>
-    <p className="text-muted-foreground text-sm mt-1">{dokumenti.length} {dokumenti.length === 1 ? 'dokument' : 'dokumentov'}</p>
-  </div>
-  <Button onClick={() => { setShowForm(true); setEditDoc(null); setImeDoc(''); setDatumDoc(''); setIzbraniOpomniki([30, 90]) }} className="rounded-full text-xs font-semibold uppercase tracking-[0.16em] w-fit">
-    + Dodaj dokument
-  </Button>
-</div>
-  <div className="flex items-center gap-2 border border-border rounded-full px-3 py-2 w-fit">
-    <span className="text-xs text-muted-foreground">Sortiraj:</span>
-    <select value={sortiranje} onChange={e => setSortiranje(e.target.value as 'datum' | 'ime')} className="text-xs bg-transparent text-muted-foreground outline-none cursor-pointer">
-      <option value="datum">po datumu</option>
-      <option value="ime">po imenu</option>
-    </select>
-  </div>
-</div>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-bold">Moji dokumenti</h1>
+              <p className="text-muted-foreground text-sm mt-1">{dokumenti.length} {dokumenti.length === 1 ? 'dokument' : 'dokumentov'}</p>
+            </div>
+            <Button onClick={() => { setShowForm(true); setEditDoc(null); setImeDoc(''); setDatumDoc(''); setLastnikDoc(''); setIzbraniOpomniki([30, 90]) }} className="rounded-full text-xs font-semibold uppercase tracking-[0.16em] w-fit">
+              + Dodaj dokument
+            </Button>
+          </div>
+          <div className="flex items-center gap-2 border border-border rounded-full px-3 py-2 w-fit">
+            <span className="text-xs text-muted-foreground">Sortiraj:</span>
+            <select value={sortiranje} onChange={e => setSortiranje(e.target.value as 'datum' | 'ime')} className="text-xs bg-transparent text-muted-foreground outline-none cursor-pointer">
+              <option value="datum">po datumu</option>
+              <option value="ime">po imenu</option>
+            </select>
+          </div>
+        </div>
 
         {/* Statistike */}
         {dokumenti.length > 0 && (
@@ -250,10 +264,29 @@ export default function Dashboard() {
         {showForm && (
           <div className="bg-card border border-border rounded-2xl p-6 mb-6">
             <h2 className="font-semibold mb-4">{editDoc ? 'Uredi dokument' : 'Nov dokument'}</h2>
+            {!editDoc && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                <p className="text-xs text-muted-foreground w-full mb-1">Hitri vnos:</p>
+                {HITRI_VNOS.map(ime => (
+                  <button
+                    key={ime}
+                    type="button"
+                    onClick={() => setImeDoc(ime)}
+                    className={`text-xs border rounded-full px-3 py-1.5 transition-colors ${imeDoc === ime ? 'border-primary text-primary bg-primary/5' : 'border-border text-muted-foreground hover:bg-secondary'}`}
+                  >
+                    {ime}
+                  </button>
+                ))}
+              </div>
+            )}
             <form onSubmit={shraniDokument} className="flex flex-col gap-4">
               <div>
                 <label className="text-sm font-medium mb-1 block">Ime dokumenta</label>
                 <Input value={imeDoc} onChange={e => setImeDoc(e.target.value)} placeholder="npr. Vozniško dovoljenje" required />
+              </div>
+              <div>
+                <label className="text-sm font-medium mb-1 block">Lastnik dokumenta</label>
+                <Input value={lastnikDoc} onChange={e => setLastnikDoc(e.target.value)} placeholder="npr. Janez, Mama, Podjetje..." />
               </div>
               <div>
                 <label className="text-sm font-medium mb-1 block">Datum poteka</label>
@@ -321,6 +354,7 @@ export default function Dashboard() {
                       <h3 className="font-semibold">{doc.ime}</h3>
                       <StatusBadge dni={dni} />
                     </div>
+                    {doc.lastnik && <p className="text-xs text-muted-foreground mb-1">👤 {doc.lastnik}</p>}
                     <p className="text-sm text-muted-foreground">Poteče: {new Date(doc.datum_poteka).toLocaleDateString('sl-SI')}</p>
                     <p className="text-xs text-muted-foreground mt-1">Opomniki: {(doc.opomniki || []).map(o => OPOMNIKI.find(op => op.vrednost === o)?.oznaka).filter(Boolean).join(', ') || 'Ni nastavljenih'}</p>
                   </div>
