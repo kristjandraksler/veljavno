@@ -171,6 +171,30 @@ export default function Dashboard() {
     router.push('/')
   }
 
+  function izvozCSV() {
+    const headers = ['Ime dokumenta', 'Lastnik', 'Datum poteka', 'Dni do poteka', 'Opomniki']
+    const vrstice = sortiraneDokumenti.map(doc => {
+      const dni = getDniDo(doc.datum_poteka)
+      return [
+        doc.ime,
+        doc.lastnik || '',
+        new Date(doc.datum_poteka).toLocaleDateString('sl-SI'),
+        dni.toString(),
+        (doc.opomniki || []).map(o => OPOMNIKI.find(op => op.vrednost === o)?.oznaka).filter(Boolean).join(' | ')
+      ]
+    })
+
+    const csv = [headers, ...vrstice].map(v => v.map(c => `"${c}"`).join(',')).join('\n')
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `veljavno-dokumenti-${new Date().toISOString().split('T')[0]}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+    toast.success('Dokumenti izvoženi!')
+  }
+
   const sortiraneDokumenti = [...dokumenti].sort((a, b) => {
     if (sortiranje === 'ime') return a.ime.localeCompare(b.ime)
     return new Date(a.datum_poteka).getTime() - new Date(b.datum_poteka).getTime()
@@ -249,12 +273,22 @@ export default function Dashboard() {
               + Dodaj dokument
             </Button>
           </div>
-          <div className="flex items-center gap-2 border border-border rounded-full px-3 py-2 w-fit">
-            <span className="text-xs text-muted-foreground">Sortiraj:</span>
-            <select value={sortiranje} onChange={e => setSortiranje(e.target.value as 'datum' | 'ime')} className="text-xs bg-transparent text-muted-foreground outline-none cursor-pointer">
-              <option value="datum">po datumu</option>
-              <option value="ime">po imenu</option>
-            </select>
+          <div className="flex items-center gap-3 flex-wrap">
+            <div className="flex items-center gap-2 border border-border rounded-full px-3 py-2 w-fit">
+              <span className="text-xs text-muted-foreground">Sortiraj:</span>
+              <select value={sortiranje} onChange={e => setSortiranje(e.target.value as 'datum' | 'ime')} className="text-xs bg-transparent text-muted-foreground outline-none cursor-pointer">
+                <option value="datum">po datumu</option>
+                <option value="ime">po imenu</option>
+              </select>
+            </div>
+            {dokumenti.length > 0 && (
+              <button onClick={izvozCSV} className="flex items-center gap-1.5 text-xs border border-border rounded-full px-3 py-2 text-muted-foreground hover:bg-secondary transition-colors">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Izvozi CSV
+              </button>
+            )}
           </div>
         </div>
 
