@@ -71,6 +71,7 @@ export default function Dashboard() {
   const router = useRouter()
   const { theme, setTheme } = useTheme()
   const [user, setUser] = useState<any>(null)
+  const [profil, setProfil] = useState<any>(null)
   const [dokumenti, setDokumenti] = useState<Dokument[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
@@ -87,9 +88,10 @@ export default function Dashboard() {
   useEffect(() => {
     supabase.auth.getUser().then(async ({ data }) => {
       if (!data.user) { router.push('/prijava'); return }
-      const { data: profil } = await supabase.from('profiles').select('placilo_potrjeno').eq('id', data.user.id).single()
-      if (!profil?.placilo_potrjeno) { router.push('/registracija'); return }
+      const { data: profilData } = await supabase.from('profiles').select('*').eq('id', data.user.id).single()
+      if (!profilData?.placilo_potrjeno) { router.push('/registracija'); return }
       setUser(data.user)
+      setProfil(profilData)
       naloziDokumente(data.user.id)
     })
   }, [])
@@ -270,6 +272,32 @@ export default function Dashboard() {
             )}
           </div>
         </div>
+
+        {/* Upsell banner za Samostojni paket */}
+        {dokumenti.length >= 1 && profil?.paket === 'samostojni' && (
+          <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-6 flex items-center justify-between gap-4 flex-wrap">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-sm">👨‍👩‍👧‍👦</span>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-blue-800">Imate družino?</p>
+                <p className="text-xs text-blue-600">Nadgradite na Družinski paket in zaščitite dokumente vseh članov.</p>
+              </div>
+            </div>
+            <button onClick={async () => {
+              const res = await fetch('/api/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ paket: 'druzinski', userId: user.id, email: user.email }),
+              })
+              const data = await res.json()
+              if (data.url) window.location.href = data.url
+            }} className="bg-blue-600 text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-blue-700 transition-colors flex-shrink-0">
+              Nadgradi za 9,99 € →
+            </button>
+          </div>
+        )}
 
         {dokumenti.filter(d => getDniDo(d.datum_poteka) <= 30).length > 0 && (
           <div className="bg-red-50 border border-red-200 rounded-2xl p-4 mb-6 flex items-center gap-3">
