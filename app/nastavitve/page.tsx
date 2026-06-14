@@ -262,34 +262,55 @@ export default function Nastavitve() {
           </div>
         )}
 
-        {/* Affiliate */}
-        <div className="bg-card border border-border rounded-2xl p-6 mb-6">
-          <h2 className="font-semibold mb-1">Affiliate program</h2>
-          <p className="text-xs text-muted-foreground mb-4">Zaslužite 30% provizije za vsako prodajo prek vaše kode.</p>
-          {affiliateKoda ? (
-            <div className="flex flex-col gap-3">
-              <div className="bg-secondary/50 rounded-xl px-4 py-3 flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Vaša koda</p>
-                  <p className="font-bold text-lg tracking-widest text-primary">{affiliateKoda}</p>
-                </div>
-                <button onClick={() => { navigator.clipboard.writeText(`https://veljavno.si?ref=${affiliateKoda}`); toast.success('Link kopiran!') }} className="text-xs border border-border px-3 py-2 rounded-full hover:bg-secondary transition-colors">
-                  Kopiraj link
-                </button>
-              </div>
-              <p className="text-xs text-muted-foreground">Vaš link: <span className="text-primary">veljavno.si?ref={affiliateKoda}</span></p>
-              <a href="/affiliate" className="text-xs text-primary hover:underline">Več o affiliate programu →</a>
-<a href="/affiliate-dashboard" className="text-xs text-primary hover:underline">Moj affiliate dashboard →</a>
-            </div>
-          ) : (
-            <div>
-              <p className="text-sm text-muted-foreground mb-4">Aktivirajte affiliate program in začnite zaslužiti.</p>
-              <Button onClick={generirajAffiliateKodo} disabled={affiliateLoading} className="rounded-full text-xs font-semibold uppercase tracking-[0.16em] w-fit">
-                {affiliateLoading ? 'Generiram...' : 'Aktiviraj affiliate'}
-              </Button>
-            </div>
-          )}
+       {/* Affiliate */}
+<div className="bg-card border border-border rounded-2xl p-6 mb-6">
+  <h2 className="font-semibold mb-1">Affiliate program</h2>
+  <p className="text-xs text-muted-foreground mb-4">Zaslužite 30% provizije za vsako prodajo prek vaše kode.</p>
+  {affiliateKoda ? (
+    <div className="flex flex-col gap-4">
+      {/* Koda */}
+      <div className="bg-secondary/50 rounded-xl px-4 py-3 flex items-center justify-between">
+        <div>
+          <p className="text-xs text-muted-foreground mb-1">Vaša koda</p>
+          <p className="font-bold text-lg tracking-widest text-primary">{affiliateKoda}</p>
         </div>
+      </div>
+      {/* Linki */}
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center justify-between bg-secondary/30 rounded-xl px-4 py-3">
+          <div>
+            <p className="text-xs text-muted-foreground mb-0.5">Referral link</p>
+            <p className="text-xs text-primary">veljavno.si?ref={affiliateKoda}</p>
+          </div>
+          <button onClick={() => { navigator.clipboard.writeText(`https://veljavno.si?ref=${affiliateKoda}`); toast.success('Link kopiran!') }} className="text-xs border border-border px-3 py-1.5 rounded-full hover:bg-secondary transition-colors flex-shrink-0 ml-3">
+            Kopiraj
+          </button>
+        </div>
+        <div className="flex items-center justify-between bg-secondary/30 rounded-xl px-4 py-3">
+          <div>
+            <p className="text-xs text-muted-foreground mb-0.5">Partner stran</p>
+            <p className="text-xs text-primary">veljavno.si/p/{affiliateKoda}</p>
+          </div>
+          <button onClick={() => { navigator.clipboard.writeText(`https://veljavno.si/p/${affiliateKoda}`); toast.success('Partner link kopiran!') }} className="text-xs border border-border px-3 py-1.5 rounded-full hover:bg-secondary transition-colors flex-shrink-0 ml-3">
+            Kopiraj
+          </button>
+        </div>
+      </div>
+      {/* Akcije */}
+      <div className="flex gap-4">
+        <a href="/affiliate-dashboard" className="text-xs text-primary hover:underline">Moj dashboard →</a>
+        <a href="/affiliate" className="text-xs text-muted-foreground hover:text-foreground transition-colors">O programu →</a>
+      </div>
+    </div>
+  ) : (
+    <div>
+      <p className="text-sm text-muted-foreground mb-4">Aktivirajte affiliate program in začnite zaslužiti.</p>
+      <Button onClick={generirajAffiliateKodo} disabled={affiliateLoading} className="rounded-full text-xs font-semibold uppercase tracking-[0.16em] w-fit">
+        {affiliateLoading ? 'Generiram...' : 'Aktiviraj affiliate'}
+      </Button>
+    </div>
+  )}
+</div>
 
         {/* Sprememba gesla */}
         <div className="bg-card border border-border rounded-2xl p-6 mb-6">
