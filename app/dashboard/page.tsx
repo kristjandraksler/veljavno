@@ -273,6 +273,24 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* Affiliate banner */}
+        {profil?.affiliate_koda && (
+          <div className="bg-green-50 border border-green-200 rounded-2xl p-4 mb-6 flex items-center justify-between gap-4 flex-wrap">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-sm">💰</span>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-green-800">Vaša affiliate koda: <span className="tracking-widest">{profil.affiliate_koda}</span></p>
+                <p className="text-xs text-green-600">Delite link in zaslužite 30% provizije za vsako prodajo.</p>
+              </div>
+            </div>
+            <a href="/affiliate-dashboard" className="bg-green-600 text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-green-700 transition-colors flex-shrink-0">
+              Moj dashboard →
+            </a>
+          </div>
+        )}
+
         {/* Upsell banner za Samostojni paket */}
         {dokumenti.length >= 1 && profil?.paket === 'samostojni' && (
           <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-6 flex items-center justify-between gap-4 flex-wrap">
@@ -457,9 +475,7 @@ export default function Dashboard() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-       <a href="/affiliate" className="fixed bottom-6 right-20 bg-card border border-border text-foreground text-xs font-semibold px-4 py-3 rounded-full shadow-lg hover:bg-secondary transition-all hover:-translate-y-1">
-  💰 Affiliate
-</a>
+
       <a href="/nastavitve" className="fixed bottom-6 right-6 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-primary/90 transition-all hover:-translate-y-1" aria-label="Nastavitve">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="3"/>

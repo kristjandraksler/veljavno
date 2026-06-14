@@ -279,6 +279,7 @@ export default function Nastavitve() {
               </div>
               <p className="text-xs text-muted-foreground">Vaš link: <span className="text-primary">veljavno.si?ref={affiliateKoda}</span></p>
               <a href="/affiliate" className="text-xs text-primary hover:underline">Več o affiliate programu →</a>
+<a href="/affiliate-dashboard" className="text-xs text-primary hover:underline">Moj affiliate dashboard →</a>
             </div>
           ) : (
             <div>
