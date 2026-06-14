@@ -284,8 +284,8 @@ export default function Home() {
       <section id="paketi" className="scroll-mt-24 py-24 md:py-40">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           <div className="mb-16 max-w-3xl">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-primary">Paketi</p>
-            <h2 className="font-display text-4xl font-bold tracking-[-0.04em] md:text-6xl"><h2 className="font-display text-4xl font-bold tracking-[-0.04em] md:text-6xl">Enkrat plačate. Za vedno mirni.</h2></h2>
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-primary">Paketi</p><p className="font-display text-4xl font-bold tracking-[-0.04em] md:text-6xl">Enkrat plačate. Za vedno mirni.</p>
+            <h2 className="font-display text-4xl font-bold tracking-[-0.04em] md:text-6xl"></h2>
           </div>
           <div className="grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
             {plans.map((plan) => (
