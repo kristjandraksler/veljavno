@@ -22,7 +22,15 @@ type Dokument = {
   datum_poteka: string
   opomniki: number[]
   lastnik?: string
+  kategorija?: string
 }
+
+const KATEGORIJE = [
+  { vrednost: 'osebni', oznaka: '🪪 Osebni', barva: 'bg-blue-100 text-blue-700' },
+  { vrednost: 'vozilo', oznaka: '🚗 Vozilo', barva: 'bg-orange-100 text-orange-700' },
+  { vrednost: 'sluzbeni', oznaka: '💼 Službeni', barva: 'bg-purple-100 text-purple-700' },
+  { vrednost: 'potovanja', oznaka: '✈️ Potovanja', barva: 'bg-green-100 text-green-700' },
+]
 
 const OPOMNIKI = [
   { vrednost: 7, oznaka: '1 teden prej' },
@@ -79,11 +87,13 @@ export default function Dashboard() {
   const [deleteDoc, setDeleteDoc] = useState<Dokument | null>(null)
   const [sortiranje, setSortiranje] = useState<'datum' | 'ime'>('datum')
   const [iskanje, setIskanje] = useState('')
+  const [filtarKategorija, setFiltarKategorija] = useState<string>('vse')
 
   const [imeDoc, setImeDoc] = useState('')
   const [datumDoc, setDatumDoc] = useState('')
   const [lastnikDoc, setLastnikDoc] = useState('')
   const [izbraniOpomniki, setIzbraniOpomniki] = useState<number[]>([30, 90])
+  const [kategorijaDoc, setKategorijaDoc] = useState('osebni')
 
   useEffect(() => {
     supabase.auth.getUser().then(async ({ data }) => {
@@ -106,13 +116,13 @@ export default function Dashboard() {
     e.preventDefault()
     if (!user) return
     if (editDoc) {
-      await supabase.from('documents').update({ ime: imeDoc, datum_poteka: datumDoc, opomniki: izbraniOpomniki, lastnik: lastnikDoc }).eq('id', editDoc.id)
+      await supabase.from('documents').update({ ime: imeDoc, datum_poteka: datumDoc, opomniki: izbraniOpomniki, lastnik: lastnikDoc, kategorija: kategorijaDoc }).eq('id', editDoc.id)
       toast.success('Dokument posodobljen!')
     } else {
-      await supabase.from('documents').insert({ user_id: user.id, ime: imeDoc, datum_poteka: datumDoc, opomniki: izbraniOpomniki, lastnik: lastnikDoc })
+      await supabase.from('documents').insert({ user_id: user.id, ime: imeDoc, datum_poteka: datumDoc, opomniki: izbraniOpomniki, lastnik: lastnikDoc, kategorija: kategorijaDoc })
       toast.success('Dokument dodan!')
     }
-    setShowForm(false); setEditDoc(null); setImeDoc(''); setDatumDoc(''); setLastnikDoc(''); setIzbraniOpomniki([30, 90])
+    setShowForm(false); setEditDoc(null); setImeDoc(''); setDatumDoc(''); setLastnikDoc(''); setIzbraniOpomniki([30, 90]); setKategorijaDoc('osebni')
     naloziDokumente(user.id)
   }
 
@@ -125,7 +135,13 @@ export default function Dashboard() {
   }
 
   function urediDokument(doc: Dokument) {
-    setEditDoc(doc); setImeDoc(doc.ime); setDatumDoc(doc.datum_poteka); setLastnikDoc(doc.lastnik || ''); setIzbraniOpomniki(doc.opomniki || [30, 90]); setShowForm(true)
+    setEditDoc(doc)
+    setImeDoc(doc.ime)
+    setDatumDoc(doc.datum_poteka)
+    setLastnikDoc(doc.lastnik || '')
+    setIzbraniOpomniki(doc.opomniki || [30, 90])
+    setKategorijaDoc(doc.kategorija || 'osebni')
+    setShowForm(true)
   }
 
   function toggleOpomnik(vrednost: number) {
@@ -138,17 +154,21 @@ export default function Dashboard() {
   }
 
   const sortiraneDokumenti = [...dokumenti]
-    .filter(d => d.ime.toLowerCase().includes(iskanje.toLowerCase()) || (d.lastnik || '').toLowerCase().includes(iskanje.toLowerCase()))
+    .filter(d => {
+      const ujemaIskanje = d.ime.toLowerCase().includes(iskanje.toLowerCase()) || (d.lastnik || '').toLowerCase().includes(iskanje.toLowerCase())
+      const ujemaKategorija = filtarKategorija === 'vse' || d.kategorija === filtarKategorija
+      return ujemaIskanje && ujemaKategorija
+    })
     .sort((a, b) => {
       if (sortiranje === 'ime') return a.ime.localeCompare(b.ime)
       return new Date(a.datum_poteka).getTime() - new Date(b.datum_poteka).getTime()
     })
 
   function izvozCSV() {
-    const headers = ['Ime dokumenta', 'Lastnik', 'Datum poteka', 'Dni do poteka', 'Opomniki']
+    const headers = ['Ime dokumenta', 'Lastnik', 'Kategorija', 'Datum poteka', 'Dni do poteka', 'Opomniki']
     const vrstice = sortiraneDokumenti.map(doc => {
       const dni = getDniDo(doc.datum_poteka)
-      return [doc.ime, doc.lastnik || '', new Date(doc.datum_poteka).toLocaleDateString('sl-SI'), dni.toString(), (doc.opomniki || []).map(o => OPOMNIKI.find(op => op.vrednost === o)?.oznaka).filter(Boolean).join(' | ')]
+      return [doc.ime, doc.lastnik || '', doc.kategorija || '', new Date(doc.datum_poteka).toLocaleDateString('sl-SI'), dni.toString(), (doc.opomniki || []).map(o => OPOMNIKI.find(op => op.vrednost === o)?.oznaka).filter(Boolean).join(' | ')]
     })
     const csv = [headers, ...vrstice].map(v => v.map(c => `"${c}"`).join(',')).join('\n')
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
@@ -237,7 +257,7 @@ export default function Dashboard() {
               <h1 className="text-2xl font-bold">Moji dokumenti</h1>
               <p className="text-muted-foreground text-sm mt-1">{dokumenti.length} {dokumenti.length === 1 ? 'dokument' : 'dokumentov'}</p>
             </div>
-            <Button onClick={() => { setShowForm(true); setEditDoc(null); setImeDoc(''); setDatumDoc(''); setLastnikDoc(''); setIzbraniOpomniki([30, 90]) }} className="rounded-full text-xs font-semibold uppercase tracking-[0.16em] w-fit">
+            <Button onClick={() => { setShowForm(true); setEditDoc(null); setImeDoc(''); setDatumDoc(''); setLastnikDoc(''); setIzbraniOpomniki([30, 90]); setKategorijaDoc('osebni') }} className="rounded-full text-xs font-semibold uppercase tracking-[0.16em] w-fit">
               + Dodaj dokument
             </Button>
           </div>
@@ -260,6 +280,13 @@ export default function Dashboard() {
               <select value={sortiranje} onChange={e => setSortiranje(e.target.value as 'datum' | 'ime')} className="text-xs bg-transparent text-muted-foreground outline-none cursor-pointer">
                 <option value="datum">po datumu</option>
                 <option value="ime">po imenu</option>
+              </select>
+            </div>
+            <div className="flex items-center gap-2 border border-border rounded-full px-3 py-2 w-fit">
+              <span className="text-xs text-muted-foreground">Kategorija:</span>
+              <select value={filtarKategorija} onChange={e => setFiltarKategorija(e.target.value)} className="text-xs bg-transparent text-muted-foreground outline-none cursor-pointer">
+                <option value="vse">Vse</option>
+                {KATEGORIJE.map(k => <option key={k.vrednost} value={k.vrednost}>{k.oznaka}</option>)}
               </select>
             </div>
             {dokumenti.length > 0 && (
@@ -373,6 +400,16 @@ export default function Dashboard() {
                 <Input value={lastnikDoc} onChange={e => setLastnikDoc(e.target.value)} placeholder="npr. Janez, Mama, Podjetje..." />
               </div>
               <div>
+                <label className="text-sm font-medium mb-2 block">Kategorija</label>
+                <div className="flex flex-wrap gap-2">
+                  {KATEGORIJE.map(k => (
+                    <button key={k.vrednost} type="button" onClick={() => setKategorijaDoc(k.vrednost)} className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${kategorijaDoc === k.vrednost ? 'border-primary bg-primary/5 text-primary' : 'border-border text-muted-foreground hover:bg-secondary'}`}>
+                      {k.oznaka}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
                 <label className="text-sm font-medium mb-1 block">Datum poteka</label>
                 <Input type="date" value={datumDoc} onChange={e => setDatumDoc(e.target.value)} required />
               </div>
@@ -429,20 +466,26 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="flex flex-col gap-4">
-            {sortiraneDokumenti.length === 0 && iskanje ? (
+            {sortiraneDokumenti.length === 0 && (iskanje || filtarKategorija !== 'vse') ? (
               <div className="text-center py-12 text-muted-foreground">
-                <p className="text-sm">Ni rezultatov za iskanje "{iskanje}"</p>
-                <button onClick={() => setIskanje('')} className="text-xs text-primary hover:underline mt-2">Počisti iskanje</button>
+                <p className="text-sm">Ni rezultatov za iskanje</p>
+                <button onClick={() => { setIskanje(''); setFiltarKategorija('vse') }} className="text-xs text-primary hover:underline mt-2">Počisti filtre</button>
               </div>
             ) : (
               sortiraneDokumenti.map(doc => {
                 const dni = getDniDo(doc.datum_poteka)
+                const kategorija = KATEGORIJE.find(k => k.vrednost === doc.kategorija)
                 return (
                   <div key={doc.id} className={`bg-card border rounded-2xl p-6 flex items-center justify-between gap-4 flex-wrap ${dni <= 30 ? 'border-red-200' : dni <= 90 ? 'border-orange-200' : 'border-border'}`}>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-3 mb-1">
+                      <div className="flex items-center gap-3 mb-1 flex-wrap">
                         <h3 className="font-semibold">{doc.ime}</h3>
                         <StatusBadge dni={dni} />
+                        {kategorija && (
+                          <span className={`text-xs px-2 py-0.5 rounded-full ${kategorija.barva}`}>
+                            {kategorija.oznaka}
+                          </span>
+                        )}
                       </div>
                       {doc.lastnik && <p className="text-xs text-muted-foreground mb-1">👤 {doc.lastnik}</p>}
                       <p className="text-sm text-muted-foreground">Poteče: {new Date(doc.datum_poteka).toLocaleDateString('sl-SI')}</p>
