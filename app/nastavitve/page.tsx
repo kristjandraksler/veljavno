@@ -27,7 +27,8 @@ export default function Nastavitve() {
   const [novClanIme, setNovClanIme] = useState('')
   const [novClanEmail, setNovClanEmail] = useState('')
   const [clanLoading, setClanLoading] = useState(false)
-
+  const [affiliateKoda, setAffiliateKoda] = useState('')
+  const [affiliateLoading, setAffiliateLoading] = useState(false)
   const [novoGeslo, setNovoGeslo] = useState('')
   const [potrdiGeslo, setPotrdiGeslo] = useState('')
   const [gesloNapaka, setGesloNapaka] = useState('')
@@ -51,6 +52,8 @@ export default function Nastavitve() {
 
       setUser(data.user)
       setProfil(profilData)
+
+      if (profilData?.affiliate_koda) setAffiliateKoda(profilData.affiliate_koda)
 
       if (profilData?.paket === 'druzinski') {
         const { data: claniData } = await supabase
@@ -94,6 +97,20 @@ export default function Nastavitve() {
     toast.success('Član odstranjen!')
     const { data } = await supabase.from('members').select('*').eq('owner_id', user.id)
     setClani(data || [])
+  }
+
+  async function generirajAffiliateKodo() {
+    if (!user || !profil) return
+    setAffiliateLoading(true)
+    const osnova = profil.ime?.split(' ')[0].toUpperCase() || 'USER'
+    const stevilka = Math.floor(Math.random() * 90 + 10)
+    const koda = `${osnova}${stevilka}`
+    const { error } = await supabase.from('profiles').update({ affiliate_koda: koda }).eq('id', user.id)
+    if (!error) {
+      setAffiliateKoda(koda)
+      toast.success('Affiliate koda ustvarjena!')
+    }
+    setAffiliateLoading(false)
   }
 
   async function spremembaGesla(e: React.FormEvent) {
@@ -186,16 +203,16 @@ export default function Nastavitve() {
                 <p className="text-sm font-semibold text-blue-800 mb-1">Nadgradi na Družinski</p>
                 <p className="text-xs text-blue-600 mb-3">Dodajte do 6 članov družine in skupni pregled dokumentov.</p>
                 <button onClick={async () => {
-  const res = await fetch('/api/checkout', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ paket: 'druzinski', userId: user.id, email: user.email }),
-  })
-  const data = await res.json()
-  if (data.url) window.location.href = data.url
-}} className="inline-block bg-blue-600 text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">
-  Nadgradi za 9,99 € →
-</button>
+                  const res = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ paket: 'druzinski', userId: user.id, email: user.email }),
+                  })
+                  const data = await res.json()
+                  if (data.url) window.location.href = data.url
+                }} className="inline-block bg-blue-600 text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">
+                  Nadgradi za 9,99 € →
+                </button>
               </div>
             )}
             {profil?.paket === 'druzinski' && (
@@ -207,13 +224,11 @@ export default function Nastavitve() {
           </div>
         </div>
 
-        {/* Člani družine - samo za Družinski paket */}
+        {/* Člani družine */}
         {profil?.paket === 'druzinski' && (
           <div className="bg-card border border-border rounded-2xl p-6 mb-6">
             <h2 className="font-semibold mb-1">Člani družine</h2>
             <p className="text-xs text-muted-foreground mb-4">{clani.length} / 5 članov dodanih</p>
-
-            {/* Seznam članov */}
             {clani.length > 0 && (
               <div className="flex flex-col gap-2 mb-4">
                 {clani.map(clan => (
@@ -229,8 +244,6 @@ export default function Nastavitve() {
                 ))}
               </div>
             )}
-
-            {/* Dodaj člana */}
             {clani.length < 5 && (
               <form onSubmit={dodajClana} className="flex flex-col gap-3">
                 <div>
@@ -248,6 +261,34 @@ export default function Nastavitve() {
             )}
           </div>
         )}
+
+        {/* Affiliate */}
+        <div className="bg-card border border-border rounded-2xl p-6 mb-6">
+          <h2 className="font-semibold mb-1">Affiliate program</h2>
+          <p className="text-xs text-muted-foreground mb-4">Zaslužite 30% provizije za vsako prodajo prek vaše kode.</p>
+          {affiliateKoda ? (
+            <div className="flex flex-col gap-3">
+              <div className="bg-secondary/50 rounded-xl px-4 py-3 flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Vaša koda</p>
+                  <p className="font-bold text-lg tracking-widest text-primary">{affiliateKoda}</p>
+                </div>
+                <button onClick={() => { navigator.clipboard.writeText(`https://veljavno.si?ref=${affiliateKoda}`); toast.success('Link kopiran!') }} className="text-xs border border-border px-3 py-2 rounded-full hover:bg-secondary transition-colors">
+                  Kopiraj link
+                </button>
+              </div>
+              <p className="text-xs text-muted-foreground">Vaš link: <span className="text-primary">veljavno.si?ref={affiliateKoda}</span></p>
+              <a href="/affiliate" className="text-xs text-primary hover:underline">Več o affiliate programu →</a>
+            </div>
+          ) : (
+            <div>
+              <p className="text-sm text-muted-foreground mb-4">Aktivirajte affiliate program in začnite zaslužiti.</p>
+              <Button onClick={generirajAffiliateKodo} disabled={affiliateLoading} className="rounded-full text-xs font-semibold uppercase tracking-[0.16em] w-fit">
+                {affiliateLoading ? 'Generiram...' : 'Aktiviraj affiliate'}
+              </Button>
+            </div>
+          )}
+        </div>
 
         {/* Sprememba gesla */}
         <div className="bg-card border border-border rounded-2xl p-6 mb-6">
