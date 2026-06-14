@@ -185,9 +185,17 @@ export default function Nastavitve() {
               <div className="mt-4 bg-blue-50 border border-blue-200 rounded-xl p-4">
                 <p className="text-sm font-semibold text-blue-800 mb-1">Nadgradi na Družinski</p>
                 <p className="text-xs text-blue-600 mb-3">Dodajte do 6 članov družine in skupni pregled dokumentov.</p>
-                <a href="/registracija?paket=druzinski" className="inline-block bg-blue-600 text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">
-                  Nadgradi za 9,99 € →
-                </a>
+                <button onClick={async () => {
+  const res = await fetch('/api/checkout', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ paket: 'druzinski', userId: user.id, email: user.email }),
+  })
+  const data = await res.json()
+  if (data.url) window.location.href = data.url
+}} className="inline-block bg-blue-600 text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">
+  Nadgradi za 9,99 € →
+</button>
               </div>
             )}
             {profil?.paket === 'druzinski' && (
