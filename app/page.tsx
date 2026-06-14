@@ -1,13 +1,13 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Check, Mail, Plus, Clock3, ShieldCheck } from 'lucide-react';
+import { Check, Mail, Plus, Clock3 } from 'lucide-react';
 
 const plans = [
   {
@@ -59,6 +59,20 @@ export default function Home() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('idle');
   const [mobileMenu, setMobileMenu] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(false);
+
+  useEffect(() => {
+    const seen = localStorage.getItem('welcome-seen')
+    if (!seen) {
+      const timer = setTimeout(() => setShowWelcome(true), 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [])
+
+  function zapriWelcome() {
+    localStorage.setItem('welcome-seen', 'true')
+    setShowWelcome(false)
+  }
 
   const handleWaitlist = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -153,12 +167,12 @@ export default function Home() {
             <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm text-muted-foreground shadow-sm">
               <span className="h-2 w-2 rounded-full bg-primary" /> Sistem za pravočasne opomnike
             </div>
-           <h1 className="max-w-6xl font-display text-5xl font-bold leading-[1.05] tracking-[-0.06em] text-foreground md:text-8xl lg:text-[7.4rem]">
-  Vsi vaši dokumenti. Vedno veljavni.
-</h1>
-<p className="mt-8 max-w-2xl text-lg leading-[1.65] text-muted-foreground md:text-xl">
-  Vozniško, osebna, potni list — dodajte datume poteka in prejmite e-mail opomnik preden je prepozno.
-</p>
+            <h1 className="max-w-6xl font-display text-5xl font-bold leading-[1.05] tracking-[-0.06em] text-foreground md:text-8xl lg:text-[7.4rem]">
+              Vsi vaši dokumenti. Vedno veljavni.
+            </h1>
+            <p className="mt-8 max-w-2xl text-lg leading-[1.65] text-muted-foreground md:text-xl">
+              Vozniško, osebna, potni list — dodajte datume poteka in prejmite e-mail opomnik preden je prepozno.
+            </p>
             <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
               <Button onClick={scrollToPackages} size="lg" className="group relative overflow-hidden rounded-full px-8 py-7 text-sm font-semibold uppercase tracking-[0.16em] shadow-xl shadow-primary/20 focus:ring-4 focus:ring-primary focus:ring-offset-2">
                 <span className="absolute inset-y-0 -left-8 w-px bg-primary-foreground/70 transition-all duration-700 group-hover:left-[115%]" />
@@ -169,91 +183,84 @@ export default function Home() {
               </div>
             </div>
           </motion.div>
-       <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.15 }} className="relative z-10 md:col-span-3 md:pt-24">
-  <div className="rounded-[2rem] border border-border bg-card/70 p-3 shadow-2xl shadow-primary/10 backdrop-blur-xl">
-    <div className="rounded-[1.5rem] bg-background border border-border overflow-hidden">
-      {/* Nav */}
-      <div className="border-b border-border px-3 py-2 flex items-center justify-between">
-        <div className="flex items-center gap-1.5">
-          <svg width="16" height="20" viewBox="0 0 60 72" fill="none">
-            <rect x="0" y="0" width="60" height="72" rx="10" fill="#2563eb"/>
-            <rect x="10" y="8" width="26" height="4" rx="2" fill="white" fillOpacity="0.5"/>
-            <rect x="10" y="17" width="40" height="4" rx="2" fill="white" fillOpacity="0.35"/>
-            <rect x="10" y="26" width="32" height="4" rx="2" fill="white" fillOpacity="0.35"/>
-            <rect x="10" y="35" width="36" height="4" rx="2" fill="white" fillOpacity="0.35"/>
-            <circle cx="43" cy="56" r="14" fill="white"/>
-            <path d="M36 56 L41 61 L50 50" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          <div>
-  <div className="text-[9px] font-bold tracking-wide">VELJAVNO</div>
-  <div className="text-[7px] text-muted-foreground">Sistem za pravočasne opomnike</div>
-  <div className="w-4 h-0.5 bg-primary mt-0.5" />
-</div>
-        </div>
-        <div className="text-[7px] text-muted-foreground">Odjava</div>
-      </div>
-      {/* Content */}
-      <div className="p-3 space-y-2">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="text-[11px] font-bold">Moji dokumenti</div>
-            <div className="text-[8px] text-muted-foreground">3 dokumenti</div>
-          </div>
-          <div className="bg-primary text-white text-[7px] font-semibold px-2 py-1 rounded-full">+ Dodaj</div>
-        </div>
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-1.5">
-          <div className="bg-red-50 border border-red-100 rounded-lg p-1.5 text-center">
-            <div className="text-sm font-bold text-red-600">1</div>
-            <div className="text-[7px] text-red-500">Poteče kmalu</div>
-          </div>
-          <div className="bg-orange-50 border border-orange-100 rounded-lg p-1.5 text-center">
-            <div className="text-sm font-bold text-orange-600">1</div>
-            <div className="text-[7px] text-orange-500">Pozor</div>
-          </div>
-          <div className="bg-green-50 border border-green-100 rounded-lg p-1.5 text-center">
-            <div className="text-sm font-bold text-green-600">1</div>
-            <div className="text-[7px] text-green-500">Veljavni</div>
-          </div>
-        </div>
-        {/* Doc 1 - red */}
-        <div className="bg-card border border-red-200 rounded-xl p-2">
-          <div className="flex items-center gap-1 mb-0.5">
-            <span className="text-[9px] font-semibold">🚗 Vozniško dovoljenje</span>
-            <span className="text-[7px] px-1 py-0.5 rounded-full bg-red-100 text-red-600 ml-auto">23 dni</span>
-          </div>
-          <div className="text-[7px] text-muted-foreground mb-1">Poteče: 6. 7. 2026</div>
-          <div className="w-full h-1 bg-muted rounded-full">
-            <div className="h-1 rounded-full bg-red-400" style={{ width: '6%' }} />
-          </div>
-        </div>
-        {/* Doc 2 - orange */}
-        <div className="bg-card border border-orange-200 rounded-xl p-2">
-          <div className="flex items-center gap-1 mb-0.5">
-            <span className="text-[9px] font-semibold">🪪 Osebna izkaznica</span>
-            <span className="text-[7px] px-1 py-0.5 rounded-full bg-orange-100 text-orange-600 ml-auto">67 dni</span>
-          </div>
-          <div className="text-[7px] text-muted-foreground mb-1">Poteče: 19. 8. 2026</div>
-          <div className="w-full h-1 bg-muted rounded-full">
-            <div className="h-1 rounded-full bg-orange-400" style={{ width: '18%' }} />
-          </div>
-        </div>
-        {/* Doc 3 - green */}
-        <div className="bg-card border border-border rounded-xl p-2">
-          <div className="flex items-center gap-1 mb-0.5">
-            <span className="text-[9px] font-semibold">🌍 Potni list</span>
-            <span className="text-[7px] px-1 py-0.5 rounded-full bg-green-100 text-green-600 ml-auto">280 dni</span>
-          </div>
-          <div className="text-[7px] text-muted-foreground mb-1">Poteče: 19. 3. 2027</div>
-          <div className="w-full h-1 bg-muted rounded-full">
-            <div className="h-1 rounded-full bg-green-400" style={{ width: '77%' }} />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</motion.div>
+          <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.15 }} className="relative z-10 md:col-span-3 md:pt-24">
+            <div className="rounded-[2rem] border border-border bg-card/70 p-3 shadow-2xl shadow-primary/10 backdrop-blur-xl">
+              <div className="rounded-[1.5rem] bg-background border border-border overflow-hidden">
+                <div className="border-b border-border px-3 py-2 flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <svg width="16" height="20" viewBox="0 0 60 72" fill="none">
+                      <rect x="0" y="0" width="60" height="72" rx="10" fill="#2563eb"/>
+                      <rect x="10" y="8" width="26" height="4" rx="2" fill="white" fillOpacity="0.5"/>
+                      <rect x="10" y="17" width="40" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+                      <rect x="10" y="26" width="32" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+                      <rect x="10" y="35" width="36" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+                      <circle cx="43" cy="56" r="14" fill="white"/>
+                      <path d="M36 56 L41 61 L50 50" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <div>
+                      <div className="text-[9px] font-bold tracking-wide">VELJAVNO</div>
+                      <div className="text-[7px] text-muted-foreground">Sistem za pravočasne opomnike</div>
+                      <div className="w-4 h-0.5 bg-primary mt-0.5" />
+                    </div>
+                  </div>
+                  <div className="text-[7px] text-muted-foreground">Odjava</div>
+                </div>
+                <div className="p-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-[11px] font-bold">Moji dokumenti</div>
+                      <div className="text-[8px] text-muted-foreground">3 dokumenti</div>
+                    </div>
+                    <div className="bg-primary text-white text-[7px] font-semibold px-2 py-1 rounded-full">+ Dodaj</div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    <div className="bg-red-50 border border-red-100 rounded-lg p-1.5 text-center">
+                      <div className="text-sm font-bold text-red-600">1</div>
+                      <div className="text-[7px] text-red-500">Poteče kmalu</div>
+                    </div>
+                    <div className="bg-orange-50 border border-orange-100 rounded-lg p-1.5 text-center">
+                      <div className="text-sm font-bold text-orange-600">1</div>
+                      <div className="text-[7px] text-orange-500">Pozor</div>
+                    </div>
+                    <div className="bg-green-50 border border-green-100 rounded-lg p-1.5 text-center">
+                      <div className="text-sm font-bold text-green-600">1</div>
+                      <div className="text-[7px] text-green-500">Veljavni</div>
+                    </div>
+                  </div>
+                  <div className="bg-card border border-red-200 rounded-xl p-2">
+                    <div className="flex items-center gap-1 mb-0.5">
+                      <span className="text-[9px] font-semibold">🚗 Vozniško dovoljenje</span>
+                      <span className="text-[7px] px-1 py-0.5 rounded-full bg-red-100 text-red-600 ml-auto">23 dni</span>
+                    </div>
+                    <div className="text-[7px] text-muted-foreground mb-1">Poteče: 6. 7. 2026</div>
+                    <div className="w-full h-1 bg-muted rounded-full">
+                      <div className="h-1 rounded-full bg-red-400" style={{ width: '6%' }} />
+                    </div>
+                  </div>
+                  <div className="bg-card border border-orange-200 rounded-xl p-2">
+                    <div className="flex items-center gap-1 mb-0.5">
+                      <span className="text-[9px] font-semibold">🪪 Osebna izkaznica</span>
+                      <span className="text-[7px] px-1 py-0.5 rounded-full bg-orange-100 text-orange-600 ml-auto">67 dni</span>
+                    </div>
+                    <div className="text-[7px] text-muted-foreground mb-1">Poteče: 19. 8. 2026</div>
+                    <div className="w-full h-1 bg-muted rounded-full">
+                      <div className="h-1 rounded-full bg-orange-400" style={{ width: '18%' }} />
+                    </div>
+                  </div>
+                  <div className="bg-card border border-border rounded-xl p-2">
+                    <div className="flex items-center gap-1 mb-0.5">
+                      <span className="text-[9px] font-semibold">🌍 Potni list</span>
+                      <span className="text-[7px] px-1 py-0.5 rounded-full bg-green-100 text-green-600 ml-auto">280 dni</span>
+                    </div>
+                    <div className="text-[7px] text-muted-foreground mb-1">Poteče: 19. 3. 2027</div>
+                    <div className="w-full h-1 bg-muted rounded-full">
+                      <div className="h-1 rounded-full bg-green-400" style={{ width: '77%' }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -284,8 +291,8 @@ export default function Home() {
       <section id="paketi" className="scroll-mt-24 py-24 md:py-40">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           <div className="mb-16 max-w-3xl">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-primary">Paketi</p><p className="font-display text-4xl font-bold tracking-[-0.04em] md:text-6xl">Enkrat plačate. Za vedno mirni.</p>
-            <h2 className="font-display text-4xl font-bold tracking-[-0.04em] md:text-6xl"></h2>
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-primary">Paketi</p>
+            <h2 className="font-display text-4xl font-bold tracking-[-0.04em] md:text-6xl">Enkrat plačate. Za vedno mirni.</h2>
           </div>
           <div className="grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
             {plans.map((plan) => (
@@ -396,6 +403,59 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Welcome popup */}
+      {showWelcome && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-5 bg-black/40 backdrop-blur-sm">
+          <div className="bg-background border border-border rounded-[2rem] p-8 max-w-md w-full shadow-2xl relative">
+            <button onClick={zapriWelcome} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+
+           <div className="flex items-center gap-3 mb-6">
+  <svg width="36" height="44" viewBox="0 0 60 72" fill="none">
+    <rect x="0" y="0" width="60" height="72" rx="10" fill="#2563eb"/>
+    <rect x="10" y="8" width="26" height="4" rx="2" fill="white" fillOpacity="0.5"/>
+    <rect x="10" y="17" width="40" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+    <rect x="10" y="26" width="32" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+    <rect x="10" y="35" width="36" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+    <circle cx="43" cy="56" r="14" fill="white"/>
+    <path d="M36 56 L41 61 L50 50" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+  <div className="flex flex-col">
+    <span className="font-display text-xl font-bold tracking-[0.08em] leading-tight">VELJAVNO</span>
+    <span className="text-xs text-muted-foreground">Sistem za pravočasne opomnike</span>
+    <div className="w-8 h-0.5 bg-primary mt-1" />
+  </div>
+</div>
+
+            <h2 className="text-2xl font-bold mb-2">Pozabite na skrbi.</h2>
+            <p className="text-muted-foreground mb-6">Veljavno vas opomni preden poteče vozniška, osebna ali potni list. Enkrat nastavite — za vedno mirni.</p>
+
+            <div className="flex flex-col gap-3 mb-6">
+              {['🚗 Vozniško dovoljenje', '🪪 Osebna izkaznica', '🌍 Potni list'].map(d => (
+                <div key={d} className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <span className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </span>
+                  {d}
+                </div>
+              ))}
+            </div>
+
+            <Button onClick={() => { zapriWelcome(); scrollToPackages() }} className="w-full rounded-full py-6 text-xs font-semibold uppercase tracking-[0.16em]">
+              Začni za 4,99 € →
+            </Button>
+            <button onClick={zapriWelcome} className="w-full text-xs text-muted-foreground mt-3 hover:text-foreground transition-colors">
+              Ne, hvala
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
