@@ -13,12 +13,16 @@ function RegistracijaForm() {
   const [email, setEmail] = useState('')
   const [geslo, setGeslo] = useState('')
   const [paket, setPaket] = useState('samostojni')
+  const [referral, setReferral] = useState('')
   const [napaka, setNapaka] = useState('')
-const [loading, setLoading] = useState(false)
-const [pogoji, setPogoji] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [pogoji, setPogoji] = useState(false)
+
   useEffect(() => {
     const paketParam = searchParams.get('paket')
     if (paketParam) setPaket(paketParam)
+    const ref = localStorage.getItem('affiliate-ref') || searchParams.get('ref') || ''
+    if (ref) setReferral(ref)
   }, [searchParams])
 
   const handleRegistracija = async (e: React.FormEvent) => {
@@ -62,7 +66,7 @@ const [pogoji, setPogoji] = useState(false)
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ paket, userId: data.user.id, email })
+        body: JSON.stringify({ paket, userId: data.user.id, email, ref: referral })
       })
       const { url } = await res.json()
       window.location.href = url
@@ -111,22 +115,28 @@ const [pogoji, setPogoji] = useState(false)
           <select value={paket} onChange={e => setPaket(e.target.value)} className="w-full border border-input rounded-lg px-3 py-2 text-sm bg-background">
             <option value="samostojni">Samostojni — 4,99 € enkratno</option>
             <option value="druzinski">Družinski — 9,99 € enkratno</option>
-            
           </select>
+        </div>
+        <div>
+          <label className="text-sm font-medium mb-1 block">
+            Referral koda <span className="text-muted-foreground font-normal">(opcijsko)</span>
+          </label>
+          <Input value={referral} onChange={e => setReferral(e.target.value)} placeholder="npr. JANEZ30" />
+          {referral && <p className="text-xs text-green-600 mt-1">✓ Referral koda bo upoštevana</p>}
         </div>
 
         {napaka && <p className="text-red-500 text-sm">{napaka}</p>}
 
         <div className="flex items-start gap-3">
-  <input type="checkbox" id="pogoji" checked={pogoji} onChange={e => setPogoji(e.target.checked)} className="w-4 h-4 mt-0.5 cursor-pointer" required />
-  <label htmlFor="pogoji" className="text-sm text-muted-foreground cursor-pointer">
-    Strinjam se s <a href="/pogoji" target="_blank" className="text-primary hover:underline">splošnimi pogoji</a> in <a href="/zasebnost" target="_blank" className="text-primary hover:underline">politiko zasebnosti</a>
-  </label>
-</div>
+          <input type="checkbox" id="pogoji" checked={pogoji} onChange={e => setPogoji(e.target.checked)} className="w-4 h-4 mt-0.5 cursor-pointer" required />
+          <label htmlFor="pogoji" className="text-sm text-muted-foreground cursor-pointer">
+            Strinjam se s <a href="/pogoji" target="_blank" className="text-primary hover:underline">splošnimi pogoji</a> in <a href="/zasebnost" target="_blank" className="text-primary hover:underline">politiko zasebnosti</a>
+          </label>
+        </div>
 
-<Button type="submit" disabled={loading || !pogoji} className="mt-2 rounded-full py-6 text-xs font-semibold uppercase tracking-[0.16em]">
-  {loading ? 'Ustvarjam račun...' : 'Ustvari račun'}
-</Button>
+        <Button type="submit" disabled={loading || !pogoji} className="mt-2 rounded-full py-6 text-xs font-semibold uppercase tracking-[0.16em]">
+          {loading ? 'Ustvarjam račun...' : 'Ustvari račun'}
+        </Button>
       </form>
     </div>
   )

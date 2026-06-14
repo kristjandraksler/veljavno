@@ -39,12 +39,22 @@ export async function POST(request: Request) {
     const paket = session.metadata?.paket
     const email = session.customer_email
 
-    if (userId && paket) {
-      await supabase
-        .from('profiles')
-        .update({ paket, placilo_potrjeno: true })
-        .eq('id', userId)
-    }
+   if (userId && paket) {
+  await supabase
+    .from('profiles')
+    .update({ paket, placilo_potrjeno: true })
+    .eq('id', userId)
+
+  const ref = session.metadata?.ref
+  if (ref) {
+    await supabase.from('affiliate_konverzije').insert({
+      ref_koda: ref,
+      user_id: userId,
+      paket,
+      znesek: paket === 'samostojni' ? 4.99 : 9.99,
+    })
+  }
+}
 
     if (email && paket) {
       const znesek = paket === 'samostojni' ? '4,99 €' : '9,99 €'

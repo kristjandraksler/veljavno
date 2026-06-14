@@ -457,7 +457,9 @@ export default function Dashboard() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
+       <a href="/affiliate" className="fixed bottom-6 right-20 bg-card border border-border text-foreground text-xs font-semibold px-4 py-3 rounded-full shadow-lg hover:bg-secondary transition-all hover:-translate-y-1">
+  💰 Affiliate
+</a>
       <a href="/nastavitve" className="fixed bottom-6 right-6 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-primary/90 transition-all hover:-translate-y-1" aria-label="Nastavitve">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="3"/>
