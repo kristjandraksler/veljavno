@@ -27,6 +27,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     {
+      url: 'https://veljavno.si/blog',
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: 'https://veljavno.si/blog/voznicko-dovoljenje-podaljsanje',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: 'https://veljavno.si/blog/osebna-izkaznica-podaljsanje',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: 'https://veljavno.si/blog/potni-list-vse-kar-moras-vedeti',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
       url: 'https://veljavno.si/pogoji',
       lastModified: new Date(),
       changeFrequency: 'yearly',
