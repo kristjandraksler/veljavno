@@ -504,7 +504,7 @@ export default function Home() {
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 mb-1">Aplikacija</p>
               <a href="/registracija" className="text-sm text-slate-200 hover:text-white transition-colors">Registracija</a>
               <a href="/prijava" className="text-sm text-slate-200 hover:text-white transition-colors">Prijava</a>
-              <a href="/affiliate" className="text-sm text-slate-200 hover:text-white transition-colors">Affiliate</a>
+              
               <a href="/blog" className="text-sm text-slate-200 hover:text-white transition-colors">Blog</a>
             </div>
 
