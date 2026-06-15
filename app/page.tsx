@@ -437,32 +437,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-24 md:py-36">
-        <div className="mx-auto max-w-7xl px-5 md:px-8">
-          <div className="bg-primary rounded-[2rem] p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8">
-            <div>
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-blue-200">Affiliate program</p>
-              <h2 className="font-display text-4xl font-bold tracking-[-0.04em] text-white md:text-5xl mb-4">Zaslužite z Veljavno.</h2>
-              <p className="text-blue-100 text-lg max-w-xl">Priporočite Veljavno in zaslužite <span className="font-bold text-white">30% provizije</span> za vsako uspešno prodajo. Brez omejitev, brez skritih pogojev.</p>
-              <div className="flex gap-8 mt-8">
-                {[
-                  { vrednost: '30%', opis: 'Provizija' },
-                  { vrednost: '30 dni', opis: 'Cookie' },
-                  { vrednost: '1x/mes', opis: 'Izplačilo' },
-                ].map(s => (
-                  <div key={s.opis}>
-                    <div className="text-2xl font-bold text-white">{s.vrednost}</div>
-                    <div className="text-sm text-blue-200">{s.opis}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <a href="/affiliate" className="flex-shrink-0 bg-white text-primary font-semibold px-8 py-4 rounded-full text-sm uppercase tracking-[0.16em] hover:bg-blue-50 transition-colors">
-              Izvedite več →
-            </a>
-          </div>
-        </div>
-      </section>
+      
 
       <section id="cakalna-lista" className="bg-slate-900 py-24 text-white md:py-36">
         <div className="mx-auto grid max-w-7xl gap-12 px-5 md:grid-cols-12 md:px-8">
