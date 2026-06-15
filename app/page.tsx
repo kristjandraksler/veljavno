@@ -133,6 +133,7 @@ export default function Home() {
           <div className="hidden md:flex items-center gap-6">
             <button onClick={() => document.getElementById('paketi')?.scrollIntoView({ behavior: 'smooth' })} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Paketi</button>
             <button onClick={() => document.getElementById('cakalna-lista')?.scrollIntoView({ behavior: 'smooth' })} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">FAQ</button>
+            <a href="/blog" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Blog</a>
             <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="p-2 rounded-full border border-border hover:bg-secondary transition-colors" aria-label="Preklopi temo">
               {theme === 'dark' ? (
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -178,6 +179,7 @@ export default function Home() {
           <div className="md:hidden border-t border-border bg-background px-5 py-4 flex flex-col gap-3">
             <button onClick={() => { document.getElementById('paketi')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenu(false) }} className="text-sm font-medium text-left py-2 text-muted-foreground hover:text-foreground transition-colors">Paketi</button>
             <button onClick={() => { document.getElementById('cakalna-lista')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenu(false) }} className="text-sm font-medium text-left py-2 text-muted-foreground hover:text-foreground transition-colors">FAQ</button>
+            <a href="/blog" className="text-sm font-medium text-left py-2 text-muted-foreground hover:text-foreground transition-colors">Blog</a>
             <hr className="border-border" />
             <a href="/prijava" className="text-sm font-medium text-white bg-foreground px-5 py-2 rounded-full hover:bg-foreground/90 transition-colors text-center">Prijava</a>
             <a href="/registracija" className="text-sm font-semibold text-white bg-primary px-5 py-2 rounded-full hover:bg-primary/90 transition-colors text-center">Registracija</a>
@@ -312,75 +314,69 @@ export default function Home() {
           </div>
         </div>
       </section>
-<section className="py-24 md:py-36">
-  <div className="mx-auto max-w-7xl px-5 md:px-8">
-    <div className="mb-16">
-      <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-primary">Primerjava</p>
-      <h2 className="font-display text-4xl font-bold tracking-[-0.04em] md:text-6xl">Veljavno vs. Excel.</h2>
-    </div>
-    <div className="rounded-[2rem] border border-border overflow-hidden">
-      <div className="grid grid-cols-3 bg-secondary/50">
-        <div className="p-5 text-sm font-semibold text-muted-foreground">Funkcija</div>
-        <div className="p-5 text-sm font-semibold text-center border-l border-border text-primary">Veljavno</div>
-        <div className="p-5 text-sm font-semibold text-center border-l border-border text-muted-foreground">Excel / ročno</div>
-      </div>
-      {[
-        { funkcija: 'Avtomatski e-mail opomnik', veljavno: true, excel: false },
-        { funkcija: 'Nastavitev več opomnikov hkrati', veljavno: true, excel: false },
-        { funkcija: 'Pregled vseh dokumentov na enem mestu', veljavno: true, excel: true },
-        { funkcija: 'Dostop iz telefona', veljavno: true, excel: false },
-        { funkcija: 'Sledenje za celo družino', veljavno: true, excel: false },
-        { funkcija: 'Vizualni pregled veljavnosti', veljavno: true, excel: false },
-        { funkcija: 'Deluje brez vzdrževanja', veljavno: true, excel: false },
-        { funkcija: 'Enkratno plačilo', veljavno: true, excel: true },
-      ].map((v, i) => (
-        <div key={v.funkcija} className={`grid grid-cols-3 border-t border-border ${i % 2 === 0 ? '' : 'bg-secondary/20'}`}>
-          <div className="p-5 text-sm text-muted-foreground flex items-center">{v.funkcija}</div>
-          <div className="p-5 border-l border-border flex items-center justify-center">
-            {v.veljavno ? (
-              <span className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </span>
-            ) : (
-              <span className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="3" strokeLinecap="round">
-                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-              </span>
-            )}
+
+      <section className="py-24 md:py-36">
+        <div className="mx-auto max-w-7xl px-5 md:px-8">
+          <div className="mb-16">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-primary">Primerjava</p>
+            <h2 className="font-display text-4xl font-bold tracking-[-0.04em] md:text-6xl">Veljavno vs. Excel.</h2>
           </div>
-          <div className="p-5 border-l border-border flex items-center justify-center">
-            {v.excel ? (
-              <span className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </span>
-            ) : (
-              <span className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="3" strokeLinecap="round">
-                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-              </span>
-            )}
+          <div className="rounded-[2rem] border border-border overflow-hidden">
+            <div className="grid grid-cols-3 bg-secondary/50">
+              <div className="p-5 text-sm font-semibold text-muted-foreground">Funkcija</div>
+              <div className="p-5 text-sm font-semibold text-center border-l border-border text-primary">Veljavno</div>
+              <div className="p-5 text-sm font-semibold text-center border-l border-border text-muted-foreground">Excel / ročno</div>
+            </div>
+            {[
+              { funkcija: 'Avtomatski e-mail opomnik', veljavno: true, excel: false },
+              { funkcija: 'Nastavitev več opomnikov hkrati', veljavno: true, excel: false },
+              { funkcija: 'Pregled vseh dokumentov na enem mestu', veljavno: true, excel: true },
+              { funkcija: 'Dostop iz telefona', veljavno: true, excel: false },
+              { funkcija: 'Sledenje za celo družino', veljavno: true, excel: false },
+              { funkcija: 'Vizualni pregled veljavnosti', veljavno: true, excel: false },
+              { funkcija: 'Deluje brez vzdrževanja', veljavno: true, excel: false },
+              { funkcija: 'Enkratno plačilo', veljavno: true, excel: true },
+            ].map((v, i) => (
+              <div key={v.funkcija} className={`grid grid-cols-3 border-t border-border ${i % 2 === 0 ? '' : 'bg-secondary/20'}`}>
+                <div className="p-5 text-sm text-muted-foreground flex items-center">{v.funkcija}</div>
+                <div className="p-5 border-l border-border flex items-center justify-center">
+                  {v.veljavno ? (
+                    <span className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </span>
+                  ) : (
+                    <span className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="3" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </span>
+                  )}
+                </div>
+                <div className="p-5 border-l border-border flex items-center justify-center">
+                  {v.excel ? (
+                    <span className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </span>
+                  ) : (
+                    <span className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="3" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+            <div className="grid grid-cols-3 border-t border-border bg-primary/5">
+              <div className="p-5 text-sm font-semibold">Skupaj</div>
+              <div className="p-5 border-l border-border text-center text-sm font-bold text-primary">8 / 8 ✓</div>
+              <div className="p-5 border-l border-border text-center text-sm font-bold text-muted-foreground">2 / 8</div>
+            </div>
+          </div>
+          <div className="mt-8 text-center">
+            <a href="/registracija" className="inline-block bg-primary text-white px-8 py-4 rounded-full text-sm font-semibold uppercase tracking-[0.16em] hover:bg-primary/90 transition-colors">
+              Začni z Veljavno →
+            </a>
           </div>
         </div>
-      ))}
-      <div className="grid grid-cols-3 border-t border-border bg-primary/5">
-        <div className="p-5 text-sm font-semibold">Skupaj</div>
-        <div className="p-5 border-l border-border text-center text-sm font-bold text-primary">8 / 8 ✓</div>
-        <div className="p-5 border-l border-border text-center text-sm font-bold text-muted-foreground">2 / 8</div>
-      </div>
-    </div>
-    <div className="mt-8 text-center">
-      <a href="/registracija" className="inline-block bg-primary text-white px-8 py-4 rounded-full text-sm font-semibold uppercase tracking-[0.16em] hover:bg-primary/90 transition-colors">
-        Začni z Veljavno →
-      </a>
-    </div>
-  </div>
-</section>
+      </section>
+
       <section id="paketi" className="scroll-mt-24 py-24 md:py-40">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           <div className="mb-16 max-w-3xl">
@@ -414,7 +410,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimoniali */}
       <section className="py-24 bg-secondary/55 md:py-36">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           <div className="mb-16">
@@ -426,7 +421,7 @@ export default function Home() {
               <div key={t.ime} className="bg-card border border-border rounded-[2rem] p-8">
                 <div className="flex gap-1 mb-4">
                   {Array.from({ length: t.zvezdice }).map((_, i) => (
-                    <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="#2563eb" xmlns="http://www.w3.org/2000/svg">
+                    <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="#2563eb">
                       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                     </svg>
                   ))}
@@ -442,7 +437,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Affiliate sekcija */}
       <section className="py-24 md:py-36">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           <div className="bg-primary rounded-[2rem] p-12 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8">
@@ -536,6 +530,7 @@ export default function Home() {
               <a href="/registracija" className="text-sm text-slate-200 hover:text-white transition-colors">Registracija</a>
               <a href="/prijava" className="text-sm text-slate-200 hover:text-white transition-colors">Prijava</a>
               <a href="/affiliate" className="text-sm text-slate-200 hover:text-white transition-colors">Affiliate</a>
+              <a href="/blog" className="text-sm text-slate-200 hover:text-white transition-colors">Blog</a>
             </div>
 
             <div className="flex flex-col gap-3">
@@ -553,7 +548,6 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Welcome popup */}
       {showWelcome && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-5 bg-black/40 backdrop-blur-sm">
           <div className="bg-background border border-border rounded-[2rem] p-8 max-w-md w-full shadow-2xl relative">
