@@ -44,13 +44,12 @@ export default function RegisterScreen({ navigation }: any) {
         'Sedaj boste preusmerjeni na plačilo da aktivirate svoj račun.',
         [
           {
-            text: 'Nadaljuj na plačilo',
-            onPress: () => {
-              const ref = referral ? `&ref=${referral}` : ''
-              Linking.openURL(`https://veljavno.si/registracija?paket=${paket}${ref}&userId=${data.user!.id}&email=${encodeURIComponent(email)}`)
-              navigation.navigate('Login')
-            }
-          }
+  text: 'Nadaljuj na plačilo',
+  onPress: () => {
+    const ref = referral ? `&ref=${referral}` : ''
+    Linking.openURL(`https://www.veljavno.si/registracija?paket=${paket}${ref}&userId=${data.user!.id}&email=${encodeURIComponent(email)}`)
+  }
+}
         ]
       )
     } else {

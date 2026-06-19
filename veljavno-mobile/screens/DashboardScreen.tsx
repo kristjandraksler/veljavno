@@ -41,6 +41,7 @@ export default function DashboardScreen({ navigation }: any) {
   const [user, setUser] = useState<any>(null)
   const [profil, setProfil] = useState<any>(null)
   const [showModal, setShowModal] = useState(false)
+  const [urejaniId, setUrejaniId] = useState<string | null>(null)
   const [imeDoc, setImeDoc] = useState('')
   const [datumDoc, setDatumDoc] = useState('')
   const [lastnikDoc, setLastnikDoc] = useState('')
@@ -74,30 +75,75 @@ export default function DashboardScreen({ navigation }: any) {
     setLoading(false)
   }
 
+  function odpriZaUrejanje(doc: Dokument) {
+    setUrejaniId(doc.id)
+    setImeDoc(doc.ime)
+    setDatumDoc(doc.datum_poteka)
+    setDatumObj(new Date(doc.datum_poteka))
+    setLastnikDoc(doc.lastnik || '')
+    setIzbraniOpomniki(doc.opomniki || [30, 90])
+    setShowModal(true)
+  }
+
+  function odpriZaDodajanje() {
+    setUrejaniId(null)
+    setImeDoc('')
+    setDatumDoc('')
+    setDatumObj(new Date())
+    setLastnikDoc('')
+    setIzbraniOpomniki([30, 90])
+    setShowModal(true)
+  }
+
   async function shraniDokument() {
     if (!imeDoc || !datumDoc) {
       Alert.alert('Napaka', 'Izpolnite ime in datum poteka!')
       return
     }
     setSaving(true)
-    const { error } = await supabase.from('documents').insert({
-      user_id: user.id,
-      ime: imeDoc,
-      datum_poteka: datumDoc,
-      opomniki: izbraniOpomniki,
-      lastnik: lastnikDoc,
-    })
-    if (error) {
-      Alert.alert('Napaka', error.message)
+
+    if (urejaniId) {
+      const { error } = await supabase
+        .from('documents')
+        .update({
+          ime: imeDoc,
+          datum_poteka: datumDoc,
+          opomniki: izbraniOpomniki,
+          lastnik: lastnikDoc,
+        })
+        .eq('id', urejaniId)
+
+      if (error) {
+        Alert.alert('Napaka', error.message)
+      } else {
+        zapriModal()
+        naloziDokumente(user.id)
+      }
     } else {
-      setShowModal(false)
-      setImeDoc('')
-      setDatumDoc('')
-      setLastnikDoc('')
-      setIzbraniOpomniki([30, 90])
-      naloziDokumente(user.id)
+      const { error } = await supabase.from('documents').insert({
+        user_id: user.id,
+        ime: imeDoc,
+        datum_poteka: datumDoc,
+        opomniki: izbraniOpomniki,
+        lastnik: lastnikDoc,
+      })
+      if (error) {
+        Alert.alert('Napaka', error.message)
+      } else {
+        zapriModal()
+        naloziDokumente(user.id)
+      }
     }
     setSaving(false)
+  }
+
+  function zapriModal() {
+    setShowModal(false)
+    setUrejaniId(null)
+    setImeDoc('')
+    setDatumDoc('')
+    setLastnikDoc('')
+    setIzbraniOpomniki([30, 90])
   }
 
   async function izbrisiDokument(id: string) {
@@ -178,8 +224,8 @@ export default function DashboardScreen({ navigation }: any) {
           </TouchableOpacity>
         )}
 
-       {profil?.affiliate_koda ? (
-  <TouchableOpacity style={styles.affiliateBanner} onPress={() => navigation.navigate('Affiliate')}>
+        {profil?.affiliate_koda ? (
+          <TouchableOpacity style={styles.affiliateBanner} onPress={() => navigation.navigate('Affiliate')}>
             <Text style={styles.affiliateNaslov}>💰 Vaša affiliate koda: {profil.affiliate_koda}</Text>
             <Text style={styles.affiliateOpis}>Delite veljavno.si?ref={profil.affiliate_koda} in zaslužite 30%</Text>
           </TouchableOpacity>
@@ -206,7 +252,7 @@ export default function DashboardScreen({ navigation }: any) {
             const borderColor = dni <= 30 ? '#fecaca' : dni <= 90 ? '#fed7aa' : '#e2e8f0'
 
             return (
-              <View key={doc.id} style={[styles.docCard, { borderColor }]}>
+              <TouchableOpacity key={doc.id} style={[styles.docCard, { borderColor }]} onPress={() => odpriZaUrejanje(doc)}>
                 <View style={styles.docHeader}>
                   <Text style={styles.docIme}>{doc.ime}</Text>
                   <View style={[styles.badge, { backgroundColor: badgeBg }]}>
@@ -224,41 +270,50 @@ export default function DashboardScreen({ navigation }: any) {
                     backgroundColor: barva
                   }]} />
                 </View>
-                <TouchableOpacity onPress={() => izbrisiDokument(doc.id)} style={styles.izbrisiBtn}>
-                  <Text style={styles.izbrisiText}>Izbriši</Text>
-                </TouchableOpacity>
-              </View>
+                <View style={styles.akcijeRow}>
+                  <TouchableOpacity onPress={() => odpriZaUrejanje(doc)}>
+                    <Text style={styles.urediText}>Uredi</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => izbrisiDokument(doc.id)}>
+                    <Text style={styles.izbrisiText}>Izbriši</Text>
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
             )
           })
         )}
       </ScrollView>
 
-      <TouchableOpacity style={styles.addBtn} onPress={() => setShowModal(true)}>
+      <TouchableOpacity style={styles.addBtn} onPress={odpriZaDodajanje}>
         <Text style={styles.addBtnText}>+ Dodaj dokument</Text>
       </TouchableOpacity>
 
       <Modal visible={showModal} animationType="slide" presentationStyle="pageSheet">
         <View style={styles.modal}>
           <View style={styles.modalHeader}>
-            <Text style={styles.modalNaslov}>Nov dokument</Text>
-            <TouchableOpacity onPress={() => setShowModal(false)}>
+            <Text style={styles.modalNaslov}>{urejaniId ? 'Uredi dokument' : 'Nov dokument'}</Text>
+            <TouchableOpacity onPress={zapriModal}>
               <Text style={styles.modalZapri}>✕</Text>
             </TouchableOpacity>
           </View>
 
           <ScrollView style={styles.modalContent}>
-            <Text style={styles.label}>Hitri vnos</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.hitriBtnRow}>
-              {HITRI_VNOS.map(ime => (
-                <TouchableOpacity
-                  key={ime}
-                  style={[styles.hitriBtn, imeDoc === ime && styles.hitriBtnActive]}
-                  onPress={() => setImeDoc(ime)}
-                >
-                  <Text style={[styles.hitriBtnText, imeDoc === ime && styles.hitriBtnTextActive]}>{ime}</Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
+            {!urejaniId && (
+              <>
+                <Text style={styles.label}>Hitri vnos</Text>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.hitriBtnRow}>
+                  {HITRI_VNOS.map(ime => (
+                    <TouchableOpacity
+                      key={ime}
+                      style={[styles.hitriBtn, imeDoc === ime && styles.hitriBtnActive]}
+                      onPress={() => setImeDoc(ime)}
+                    >
+                      <Text style={[styles.hitriBtnText, imeDoc === ime && styles.hitriBtnTextActive]}>{ime}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </>
+            )}
 
             <Text style={styles.label}>Ime dokumenta</Text>
             <TextInput
@@ -314,7 +369,7 @@ export default function DashboardScreen({ navigation }: any) {
             </View>
 
             <TouchableOpacity style={styles.shraniBtn} onPress={shraniDokument} disabled={saving}>
-              <Text style={styles.shraniBtnText}>{saving ? 'Shranjujem...' : 'Shrani dokument'}</Text>
+              <Text style={styles.shraniBtnText}>{saving ? 'Shranjujem...' : urejaniId ? 'Shrani spremembe' : 'Shrani dokument'}</Text>
             </TouchableOpacity>
           </ScrollView>
         </View>
@@ -419,8 +474,9 @@ const styles = StyleSheet.create({
   progressFill: { height: 4, borderRadius: 2 },
   badge: { borderRadius: 20, paddingHorizontal: 8, paddingVertical: 3 },
   badgeText: { fontSize: 10, fontWeight: '600' },
-  izbrisiBtn: { marginTop: 10, alignSelf: 'flex-end' },
-  izbrisiText: { fontSize: 12, color: '#ef4444' },
+  akcijeRow: { flexDirection: 'row', justifyContent: 'flex-end', gap: 16, marginTop: 10 },
+  urediText: { fontSize: 12, color: '#2563eb', fontWeight: '600' },
+  izbrisiText: { fontSize: 12, color: '#ef4444', fontWeight: '600' },
   addBtn: {
     backgroundColor: '#2563eb',
     margin: 16,

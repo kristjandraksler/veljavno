@@ -13,9 +13,17 @@ const geist = Geist({
 
 export const metadata: Metadata = {
   title: "Veljavno — Sistem za pravočasne opomnike",
-  description: "Vozniško, osebna, potni list — dodajte datume poteka in prejmite e-mail opomnik preden je prepozno.",
+  description: "Vozniško, osebna, potni list — dodajte datume poteka in prejmite e-mail opomnik preden je prepozno. Enkratno plačilo od 4,99 €.",
+  keywords: ["opomnik dokumenti", "vozniško dovoljenje poteka", "osebna izkaznica podaljšanje", "potni list", "Slovenija"],
+  openGraph: {
+    title: "Veljavno — Sistem za pravočasne opomnike",
+    description: "Nikoli več potekle vozniške ali osebne izkaznice. Pravočasen e-mail opomnik za vse vaše dokumente.",
+    url: "https://veljavno.si",
+    siteName: "Veljavno",
+    locale: "sl_SI",
+    type: "website",
+  },
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{
