@@ -1,0 +1,16 @@
+<svg width="600" height="100" viewBox="0 0 600 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Ikona -->
+  <rect x="0" y="0" width="60" height="72" rx="10" fill="#2563eb"/>
+  <rect x="10" y="8" width="26" height="4" rx="2" fill="white" fillOpacity="0.5"/>
+  <rect x="10" y="17" width="40" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+  <rect x="10" y="26" width="32" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+  <rect x="10" y="35" width="36" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+  <circle cx="43" cy="56" r="14" fill="white"/>
+  <path d="M36 56 L41 61 L50 50" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+  <!-- Tekst VELJAVNO -->
+  <text x="75" y="35" font-family="Arial" font-weight="700" font-size="24" letter-spacing="4" fill="#0f172a">VELJAVNO</text>
+  <!-- Podtekst -->
+  <text x="75" y="55" font-family="Arial" font-size="11" fill="#94a3b8">Sistem za pravočasne opomnike</text>
+  <!-- Modra črta -->
+  <rect x="75" y="62" width="32" height="2" rx="1" fill="#2563eb"/>
+</svg>

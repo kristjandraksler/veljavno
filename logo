@@ -1,0 +1,12 @@
+<svg width="200" height="240" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dokument -->
+  <rect x="0" y="0" width="200" height="240" rx="33" fill="#2563eb"/>
+  <!-- Linije dokumenta -->
+  <rect x="33" y="27" width="87" height="13" rx="7" fill="white" fillOpacity="0.5"/>
+  <rect x="33" y="57" width="133" height="13" rx="7" fill="white" fillOpacity="0.35"/>
+  <rect x="33" y="87" width="107" height="13" rx="7" fill="white" fillOpacity="0.35"/>
+  <rect x="33" y="117" width="120" height="13" rx="7" fill="white" fillOpacity="0.35"/>
+  <!-- Krog s kljukico -->
+  <circle cx="143" cy="187" r="47" fill="white"/>
+  <path d="M120 187 L137 204 L167 167" stroke="#2563eb" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
+</svg>
