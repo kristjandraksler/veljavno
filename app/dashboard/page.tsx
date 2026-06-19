@@ -55,7 +55,38 @@ function getDniDo(datum: string) {
   const poteka = new Date(datum)
   return Math.ceil((poteka.getTime() - danes.getTime()) / 86400000)
 }
+function dodajVKoledar(doc: Dokument) {
+  const datum = new Date(doc.datum_poteka)
+  const datumStr = datum.toISOString().split('T')[0].replace(/-/g, '')
 
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'BEGIN:VEVENT',
+    `UID:${doc.id}@veljavno.si`,
+    `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z`,
+    `DTSTART:${datumStr}`,
+    `DTEND:${datumStr}`,
+    `SUMMARY:Poteče: ${doc.ime}`,
+    `DESCRIPTION:Dokument ${doc.ime}${doc.lastnik ? ' (' + doc.lastnik + ')' : ''} poteče danes. Preverite in pravočasno podaljšajte.`,
+    'BEGIN:VALARM',
+    'ACTION:DISPLAY',
+    'DESCRIPTION:Opomnik: dokument poteče kmalu',
+    'TRIGGER:-P30D',
+    'END:VALARM',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n')
+
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `${doc.ime.replace(/[^a-zA-Z0-9]/g, '-')}.ics`
+  a.click()
+  URL.revokeObjectURL(url)
+  toast.success('Dogodek pripravljen za koledar!')
+}
 function StatusBadge({ dni }: { dni: number }) {
   if (dni < 0) return <span className="text-xs px-2 py-1 rounded-full bg-red-100 text-red-600">Poteklo pred {Math.abs(dni)} dni</span>
   if (dni === 0) return <span className="text-xs px-2 py-1 rounded-full bg-red-100 text-red-600">Poteče danes!</span>
@@ -493,9 +524,10 @@ export default function Dashboard() {
                       <ProgressBar dni={dni} />
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" onClick={() => urediDokument(doc)} className="rounded-full text-xs px-4">Uredi</Button>
-                      <Button variant="outline" onClick={() => setDeleteDoc(doc)} className="rounded-full text-xs px-4 text-red-500 border-red-200 hover:bg-red-50">Izbriši</Button>
-                    </div>
+  <Button variant="outline" onClick={() => dodajVKoledar(doc)} className="rounded-full text-xs px-4">📅 Koledar</Button>
+  <Button variant="outline" onClick={() => urediDokument(doc)} className="rounded-full text-xs px-4">Uredi</Button>
+  <Button variant="outline" onClick={() => setDeleteDoc(doc)} className="rounded-full text-xs px-4 text-red-500 border-red-200 hover:bg-red-50">Izbriši</Button>
+</div>
                   </div>
                 )
               })
