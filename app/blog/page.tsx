@@ -92,7 +92,7 @@ export default function Blog() {
         <div className="flex flex-col gap-6">
           {clanki.map((clanek, i) => (
             
-              key={clanek.slug}
+              <a key={clanek.slug}
               href={`/blog/${clanek.slug}`}
               className="group bg-card border border-border rounded-2xl p-8 hover:border-primary hover:shadow-lg hover:shadow-primary/5 transition-all"
             >
