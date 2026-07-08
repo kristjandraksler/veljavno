@@ -157,7 +157,7 @@ export default function Home() {
 
             <div className="inline-flex items-center gap-2 border border-border rounded-full px-4 py-1.5 text-sm text-muted-foreground mb-8 bg-secondary/50">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              Slovenija · Enkratno plačilo · Brez naročnine
+              Enkratno plačilo · Brez naročnine
             </div>
 
             <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold tracking-[-0.04em] leading-[0.95] mb-6">
@@ -175,7 +175,7 @@ export default function Home() {
                 Začni za 4,99 € <ArrowRight className="w-4 h-4" />
               </Button>
               <a href="/prijava" className="inline-flex items-center justify-center rounded-full px-8 py-3 text-sm font-medium border border-border hover:bg-secondary transition-colors">
-                Imam že račun
+                Že imam račun
               </a>
             </div>
 
