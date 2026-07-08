@@ -74,6 +74,18 @@ function scrollToPackages() {
   document.getElementById('paketi')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+const Kljukica = () => (
+  <span className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+  </span>
+)
+
+const Krizec = () => (
+  <span className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="3" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </span>
+)
+
 export default function Home() {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
@@ -319,53 +331,42 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           <div className="mb-16">
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-primary">Primerjava</p>
-            <h2 className="font-display text-4xl font-bold tracking-[-0.04em] md:text-6xl">Veljavno vs. Excel.</h2>
+            <h2 className="font-display text-4xl font-bold tracking-[-0.04em] md:text-6xl">Veljavno vs. Excel vs. Google Calendar.</h2>
           </div>
           <div className="rounded-[2rem] border border-border overflow-hidden">
-            <div className="grid grid-cols-3 bg-secondary/50">
+            <div className="grid grid-cols-4 bg-secondary/50">
               <div className="p-5 text-sm font-semibold text-muted-foreground">Funkcija</div>
               <div className="p-5 text-sm font-semibold text-center border-l border-border text-primary">Veljavno</div>
               <div className="p-5 text-sm font-semibold text-center border-l border-border text-muted-foreground">Excel / ročno</div>
+              <div className="p-5 text-sm font-semibold text-center border-l border-border text-muted-foreground">Google Calendar</div>
             </div>
             {[
-              { funkcija: 'Avtomatski e-mail opomnik', veljavno: true, excel: false },
-              { funkcija: 'Nastavitev več opomnikov hkrati', veljavno: true, excel: false },
-              { funkcija: 'Pregled vseh dokumentov na enem mestu', veljavno: true, excel: true },
-              { funkcija: 'Dostop iz telefona', veljavno: true, excel: false },
-              { funkcija: 'Sledenje za celo družino', veljavno: true, excel: false },
-              { funkcija: 'Vizualni pregled veljavnosti', veljavno: true, excel: false },
-              { funkcija: 'Deluje brez vzdrževanja', veljavno: true, excel: false },
-              { funkcija: 'Enkratno plačilo', veljavno: true, excel: true },
+              { funkcija: 'Avtomatski e-mail opomnik', veljavno: true, excel: false, gcal: false },
+              { funkcija: 'Nastavitev več opomnikov hkrati', veljavno: true, excel: false, gcal: true },
+              { funkcija: 'Pregled vseh dokumentov na enem mestu', veljavno: true, excel: true, gcal: false },
+              { funkcija: 'Dostop iz telefona', veljavno: true, excel: false, gcal: true },
+              { funkcija: 'Sledenje za celo družino', veljavno: true, excel: false, gcal: false },
+              { funkcija: 'Vizualni pregled veljavnosti', veljavno: true, excel: false, gcal: false },
+              { funkcija: 'Deluje brez vzdrževanja', veljavno: true, excel: false, gcal: false },
+              { funkcija: 'Enkratno plačilo', veljavno: true, excel: true, gcal: false },
             ].map((v, i) => (
-              <div key={v.funkcija} className={`grid grid-cols-3 border-t border-border ${i % 2 === 0 ? '' : 'bg-secondary/20'}`}>
+              <div key={v.funkcija} className={`grid grid-cols-4 border-t border-border ${i % 2 === 0 ? '' : 'bg-secondary/20'}`}>
                 <div className="p-5 text-sm text-muted-foreground flex items-center">{v.funkcija}</div>
                 <div className="p-5 border-l border-border flex items-center justify-center">
-                  {v.veljavno ? (
-                    <span className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    </span>
-                  ) : (
-                    <span className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="3" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                    </span>
-                  )}
+                  {v.veljavno ? <Kljukica /> : <Krizec />}
                 </div>
                 <div className="p-5 border-l border-border flex items-center justify-center">
-                  {v.excel ? (
-                    <span className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    </span>
-                  ) : (
-                    <span className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="3" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                    </span>
-                  )}
+                  {v.excel ? <Kljukica /> : <Krizec />}
+                </div>
+                <div className="p-5 border-l border-border flex items-center justify-center">
+                  {v.gcal ? <Kljukica /> : <Krizec />}
                 </div>
               </div>
             ))}
-            <div className="grid grid-cols-3 border-t border-border bg-primary/5">
+            <div className="grid grid-cols-4 border-t border-border bg-primary/5">
               <div className="p-5 text-sm font-semibold">Skupaj</div>
               <div className="p-5 border-l border-border text-center text-sm font-bold text-primary">8 / 8 ✓</div>
+              <div className="p-5 border-l border-border text-center text-sm font-bold text-muted-foreground">2 / 8</div>
               <div className="p-5 border-l border-border text-center text-sm font-bold text-muted-foreground">2 / 8</div>
             </div>
           </div>
@@ -437,8 +438,6 @@ export default function Home() {
         </div>
       </section>
 
-      
-
       <section id="cakalna-lista" className="bg-slate-900 py-24 text-white md:py-36">
         <div className="mx-auto grid max-w-7xl gap-12 px-5 md:grid-cols-12 md:px-8">
           <div className="md:col-span-6">
@@ -504,7 +503,6 @@ export default function Home() {
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 mb-1">Aplikacija</p>
               <a href="/registracija" className="text-sm text-slate-200 hover:text-white transition-colors">Registracija</a>
               <a href="/prijava" className="text-sm text-slate-200 hover:text-white transition-colors">Prijava</a>
-              
               <a href="/blog" className="text-sm text-slate-200 hover:text-white transition-colors">Blog</a>
             </div>
 
