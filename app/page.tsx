@@ -384,28 +384,88 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Mobilna app */}
-      <section className="py-24 md:py-32">
-        <div className="max-w-6xl mx-auto px-5 md:px-8">
-          <div className="rounded-2xl bg-foreground text-background p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-10">
-            <div className="flex-1">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground/50 mb-3">Mobilna aplikacija</p>
-              <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Veljavno v žepu. 📱</h2>
-              <p className="text-foreground/70 mb-8 max-w-md">Upravljajte dokumente kjerkoli — iOS in Android. Sinhronizirano s spletom.</p>
-              <div className="flex gap-3">
-                <div className="bg-background/10 border border-background/20 text-background/80 px-5 py-2.5 rounded-xl text-xs font-semibold cursor-not-allowed opacity-60">App Store — kmalu</div>
-                <div className="bg-background/10 border border-background/20 text-background/80 px-5 py-2.5 rounded-xl text-xs font-semibold cursor-not-allowed opacity-60">Google Play — kmalu</div>
+     {/* Mobilna app */}
+<section className="py-24 md:py-32">
+  <div className="max-w-6xl mx-auto px-5 md:px-8">
+    <div className="grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary mb-3">Mobilna aplikacija</p>
+        <h2 className="font-display text-4xl md:text-5xl font-bold tracking-[-0.03em] mb-6">Veljavno vedno pri roki. 📱</h2>
+        <p className="text-muted-foreground text-lg mb-8 leading-relaxed">Upravljajte dokumente kjerkoli — dodajte, urejajte in preverite status direktno iz telefona. Sinhronizirano s spletom v realnem času.</p>
+        <div className="flex flex-col gap-3 mb-8">
+          {['iOS in Android podpora', 'Sinhronizirano s spletom', 'Brezplačno z vsakim paketom'].map(f => (
+            <div key={f} className="flex items-center gap-3 text-sm">
+              <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="3" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
               </div>
+              {f}
             </div>
-            <div className="w-40 h-64 bg-background/10 rounded-2xl border border-background/20 flex items-center justify-center flex-shrink-0">
-              <div className="text-center">
-                <div className="text-5xl mb-3">📱</div>
-                <p className="text-background/50 text-xs">Kmalu</p>
-              </div>
+          ))}
+        </div>
+        <div className="flex gap-3">
+          <div className="flex items-center gap-2 border border-border rounded-xl px-4 py-2.5 opacity-50 cursor-not-allowed">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            <div>
+              <div className="text-[9px] text-muted-foreground">Kmalu na</div>
+              <div className="text-xs font-semibold">App Store</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 border border-border rounded-xl px-4 py-2.5 opacity-50 cursor-not-allowed">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.3.17.64.24.99.2l12.45-7.19-2.78-2.78-10.66 9.77zm-1.76-20.3C1.16 3.77 1 4.1 1 4.56v14.88c0 .46.16.79.42 1.1l.08.08 8.34-8.34v-.2L1.5 3.38l-.08.08zM20.49 10.34l-2.37-1.37-3.13 3.13 3.13 3.14 2.4-1.38c.68-.39.68-1.03-.03-1.52zM4.17.24L16.62 7.43l-2.78 2.78L3.18.44C3.49.27 3.87.07 4.17.24z"/></svg>
+            <div>
+              <div className="text-[9px] text-muted-foreground">Kmalu na</div>
+              <div className="text-xs font-semibold">Google Play</div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+
+      {/* Telefon mockup */}
+      <div className="flex justify-center">
+        <div className="relative w-56">
+          <div className="w-56 h-[480px] bg-foreground rounded-[2.5rem] p-3 shadow-2xl">
+            <div className="w-full h-full bg-background rounded-[2rem] overflow-hidden">
+              <div className="bg-primary px-4 py-5">
+                <p className="text-blue-200 text-[10px]">Dober dan 👋</p>
+                <p className="text-white font-bold text-sm">Moji dokumenti</p>
+                <div className="grid grid-cols-3 gap-1.5 mt-3">
+                  {[{n:'1',l:'Kmalu',c:'bg-red-500/20 text-red-200'},{n:'1',l:'Pozor',c:'bg-orange-500/20 text-orange-200'},{n:'2',l:'OK',c:'bg-green-500/20 text-green-200'}].map(s => (
+                    <div key={s.l} className={`${s.c} rounded-lg p-1.5 text-center`}>
+                      <div className="text-base font-bold">{s.n}</div>
+                      <div className="text-[8px]">{s.l}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="p-3 space-y-2">
+                {[
+                  { ime: '🚗 Vozniško', dni: 23, badge: 'bg-red-100 text-red-600', barva: 'bg-red-400', w: '6%' },
+                  { ime: '🪪 Osebna', dni: 67, badge: 'bg-orange-100 text-orange-600', barva: 'bg-orange-400', w: '18%' },
+                  { ime: '🌍 Potni list', dni: 280, badge: 'bg-green-100 text-green-600', barva: 'bg-green-400', w: '77%' },
+                ].map(doc => (
+                  <div key={doc.ime} className="bg-card rounded-xl p-2.5 border border-border">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-[10px] font-medium">{doc.ime}</span>
+                      <span className={`text-[8px] px-1.5 py-0.5 rounded-full font-semibold ${doc.badge}`}>{doc.dni}d</span>
+                    </div>
+                    <div className="h-0.5 bg-muted rounded-full">
+                      <div className={`h-0.5 ${doc.barva} rounded-full`} style={{ width: doc.w }} />
+                    </div>
+                  </div>
+                ))}
+                <div className="bg-primary rounded-xl p-2.5 text-center">
+                  <p className="text-white text-[9px] font-semibold">+ Dodaj dokument</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Reflection */}
+          <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-40 h-8 bg-foreground/10 rounded-full blur-xl" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* Waitlist */}
       <section id="cakalna-lista" className="py-24 md:py-32 bg-secondary/30">
