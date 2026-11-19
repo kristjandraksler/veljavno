@@ -118,18 +118,22 @@ export default function Home() {
       {/* Nav */}
       <nav className="fixed left-0 right-0 top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 md:px-8">
-          <a href="#top" className="flex items-center gap-3">
-            <svg width="32" height="38" viewBox="0 0 60 72" fill="none">
-              <rect x="0" y="0" width="60" height="72" rx="10" fill="#2563eb"/>
-              <rect x="10" y="8" width="26" height="4" rx="2" fill="white" fillOpacity="0.5"/>
-              <rect x="10" y="17" width="40" height="4" rx="2" fill="white" fillOpacity="0.35"/>
-              <rect x="10" y="26" width="32" height="4" rx="2" fill="white" fillOpacity="0.35"/>
-              <rect x="10" y="35" width="36" height="4" rx="2" fill="white" fillOpacity="0.35"/>
-              <circle cx="43" cy="56" r="14" fill="white"/>
-              <path d="M36 56 L41 61 L50 50" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            <span className="font-display text-lg font-bold tracking-[0.08em]">VELJAVNO</span>
-          </a>
+         <a href="#top" className="flex items-center gap-3">
+  <svg width="36" height="44" viewBox="0 0 60 72" fill="none">
+    <rect x="0" y="0" width="60" height="72" rx="10" fill="#2563eb"/>
+    <rect x="10" y="8" width="26" height="4" rx="2" fill="white" fillOpacity="0.5"/>
+    <rect x="10" y="17" width="40" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+    <rect x="10" y="26" width="32" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+    <rect x="10" y="35" width="36" height="4" rx="2" fill="white" fillOpacity="0.35"/>
+    <circle cx="43" cy="56" r="14" fill="white"/>
+    <path d="M36 56 L41 61 L50 50" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+  <div className="flex flex-col">
+    <span className="font-display text-xl font-bold tracking-[0.08em] leading-tight">VELJAVNO</span>
+    <span className="text-xs text-muted-foreground">Sistem za pravočasne opomnike</span>
+    <div className="w-8 h-0.5 bg-primary mt-1" />
+  </div>
+</a>
           <div className="hidden md:flex items-center gap-1">
             <button onClick={() => document.getElementById('paketi')?.scrollIntoView({ behavior: 'smooth' })} className="text-sm text-muted-foreground hover:text-foreground transition-colors px-4 py-2 rounded-full hover:bg-secondary">Paketi</button>
             <button onClick={() => document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' })} className="text-sm text-muted-foreground hover:text-foreground transition-colors px-4 py-2 rounded-full hover:bg-secondary">FAQ</button>
@@ -474,7 +478,11 @@ export default function Home() {
                   <circle cx="43" cy="56" r="14" fill="white"/>
                   <path d="M36 56 L41 61 L50 50" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <span className="font-display font-bold tracking-[0.08em]">VELJAVNO</span>
+                <div className="flex flex-col">
+  <span className="font-display text-lg font-bold tracking-[0.08em] leading-tight">VELJAVNO</span>
+  <span className="text-xs text-muted-foreground">Sistem za pravočasne opomnike</span>
+  <div className="w-8 h-0.5 bg-primary mt-1" />
+</div>
               </a>
               <p className="text-sm text-muted-foreground max-w-xs">Sistem za pravočasne opomnike. Narejeno v Sloveniji 🇸🇮</p>
             </div>
