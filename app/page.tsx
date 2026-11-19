@@ -14,7 +14,7 @@ const plans = [
     name: 'Samostojni',
     price: '4,99 €',
     cadence: 'enkratno',
-    features: ['1 oseba', 'Neomejeni dokumenti', 'E-mail opomniki'],
+    features: ['1 oseba', 'Neomejeni dokumenti in roki', 'E-mail opomniki', 'Izvoz v koledar'],
     popular: false,
     variant: 'samostojni',
   },
@@ -22,31 +22,31 @@ const plans = [
     name: 'Družinski',
     price: '9,99 €',
     cadence: 'enkratno',
-    features: ['Do 6 oseb', 'Neomejeni dokumenti', 'E-mail opomniki', 'Skupni pregled'],
+    features: ['Do 6 oseb', 'Neomejeni dokumenti in roki', 'E-mail opomniki', 'Skupni pregled družine'],
     popular: true,
     variant: 'druzinski',
   },
 ];
 
 const steps = [
-  { icon: Plus, title: 'Dodaj dokumente', text: 'Vnesite vozniško, osebno, potni list ali drug dokument z datumom poteka.' },
+  { icon: Plus, title: 'Dodaj rok', text: 'Tehnični pregled, zavarovanje, zdravstvena kartica, garancija, osebni dokumenti — karkoli ima datum poteka.' },
   { icon: Clock3, title: 'Nastavi opomnik', text: 'Izberite opomnik 1 teden, 1 mesec, 3 mesece ali 6 mesecev prej.' },
-  { icon: Mail, title: 'Prejmi e-mail', text: 'Veljavno vas pravočasno opozori, še preden dokument poteče.' },
+  { icon: Mail, title: 'Prejmi e-mail', text: 'Veljavno vas pravočasno opozori, še preden rok poteče.' },
 ];
 
-const testimoniali = [
-  { ime: 'Maja K.', vloga: 'Mama dveh otrok', tekst: 'Končno aplikacija ki me opomni preden poteče vozniška. Lani sem zamudila in plačala kazen — tega se ne bo več zgodilo.', zvezdice: 5 },
-  { ime: 'Andrej P.', vloga: 'Voznik dostavne službe', tekst: 'Imam 3 vozila in za vsako moram slediti prometnim dovoljenjem. Veljavno mi prihrani ogromno časa in skrbi.', zvezdice: 5 },
-  { ime: 'Tina M.', vloga: 'Pogosta potovalka', tekst: 'Potni list mi je potekel tik pred potovanjem. Zdaj imam Veljavno in sem mirna — 6 mesecev prej dobim opomnik.', zvezdice: 5 },
-]
+const zaKoga = [
+  { ikona: '🚗', naslov: 'Lastniki vozil', tekst: 'Tehnični pregled, registracija in zavarovanje na enem mestu, za vsako vozilo posebej.' },
+  { ikona: '👨‍👩‍👧‍👦', naslov: 'Družine', tekst: 'Dokumenti in roki vseh članov družine v skupnem pregledu, do 6 oseb.' },
+  { ikona: '💼', naslov: 'Samostojni podjetniki', tekst: 'Licence, potrdila, zavarovanja in pogodbe, ki jih ne smete zamuditi.' },
+];
 
 const faqs = [
-  { q: 'Kateri dokumenti so podprti?', a: 'Vozniško dovoljenje, osebna izkaznica, potni list in katerikoli drug dokument z datumom poteka.' },
-  { q: 'Kdaj točno dobim opomnik?', a: 'Vi izberete — 1 teden, 1 mesec, 3 mesece ali 6 mesecev pred potekom dokumenta.' },
+  { q: 'Zakaj ne uporabim eUprave?', a: 'eUprava ponuja brezplačen e-opomnik o poteku osebnih dokumentov in je dobra izbira za to. Veljavno je namenjeno tistim, ki želijo vse roke na enem mestu: tudi vozilo, zavarovanje in garancije, ter pregled za celo družino. Prijava ne zahteva SI-PASS ali digitalnega potrdila.' },
+  { q: 'Kateri dokumenti in roki so podprti?', a: 'Vsi z datumom poteka: vozniško dovoljenje, osebna izkaznica, potni list, zdravstvena kartica, tehnični pregled, registracija, zavarovanja, garancije in drugo.' },
+  { q: 'Kdaj točno dobim opomnik?', a: 'Vi izberete: 1 teden, 1 mesec, 3 mesece ali 6 mesecev pred potekom.' },
   { q: 'Ali je plačilo varno?', a: 'Plačilo poteka prek Stripe, ki je eden najvarnejših plačilnih sistemov na svetu.' },
-  { q: 'Ali deluje na mobitelu?', a: 'Da! Veljavno deluje na vseh napravah — računalniku, tablici in mobilnem telefonu.' },
-  { q: 'Kaj se zgodi po plačilu?', a: 'Takoj po plačilu dobite dostop do dashboarda kjer dodate dokumente in nastavite opomnike. Traja manj kot 2 minuti.' },
-  { q: 'Ali moram plačevati vsako leto?', a: 'Ne! Enkratno plačilo — plačate enkrat in uporabljate za vedno. Brez naročnine, brez skritih stroškov.' },
+  { q: 'Ali deluje na mobitelu?', a: 'Da, deluje na računalniku, tablici in telefonu.' },
+  { q: 'Ali moram plačevati vsako leto?', a: 'Ne. Plačate enkrat. Brez naročnine, brez skritih stroškov.' },
 ];
 
 function scrollToPackages() {
@@ -64,6 +64,19 @@ const Krizec = () => (
     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="3" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
   </span>
 )
+
+function Celica({ v }: { v: boolean | string }) {
+  if (typeof v === 'string') return <span className="text-xs font-semibold text-center">{v}</span>
+  return v ? <Kljukica /> : <Krizec />
+}
+
+const primerjava: { funkcija: string; veljavno: boolean | string; eUprava: boolean | string; koledar: boolean | string }[] = [
+  { funkcija: 'Samodejni opomnik o poteku osebnih dokumentov', veljavno: true, eUprava: true, koledar: false },
+  { funkcija: 'Poljubni roki (zavarovanje, tehnični pregled, garancije)', veljavno: true, eUprava: false, koledar: true },
+  { funkcija: 'Pregled vse družine na enem mestu', veljavno: true, eUprava: false, koledar: false },
+  { funkcija: 'Prijava brez SI-PASS ali digitalnega potrdila', veljavno: true, eUprava: false, koledar: true },
+  { funkcija: 'Cena', veljavno: '4,99 € enkratno', eUprava: 'Brezplačno', koledar: 'Brezplačno' },
+]
 
 export default function Home() {
   const router = useRouter();
@@ -119,7 +132,7 @@ export default function Home() {
           </a>
           <div className="hidden md:flex items-center gap-1">
             <button onClick={() => document.getElementById('paketi')?.scrollIntoView({ behavior: 'smooth' })} className="text-sm text-muted-foreground hover:text-foreground transition-colors px-4 py-2 rounded-full hover:bg-secondary">Paketi</button>
-            <button onClick={() => document.getElementById('cakalna-lista')?.scrollIntoView({ behavior: 'smooth' })} className="text-sm text-muted-foreground hover:text-foreground transition-colors px-4 py-2 rounded-full hover:bg-secondary">FAQ</button>
+            <button onClick={() => document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' })} className="text-sm text-muted-foreground hover:text-foreground transition-colors px-4 py-2 rounded-full hover:bg-secondary">FAQ</button>
             <a href="/blog" className="text-sm text-muted-foreground hover:text-foreground transition-colors px-4 py-2 rounded-full hover:bg-secondary">Blog</a>
           </div>
           <div className="hidden md:flex items-center gap-3">
@@ -141,7 +154,7 @@ export default function Home() {
         {mobileMenu && (
           <div className="md:hidden border-t border-border bg-background px-5 py-4 flex flex-col gap-2">
             <button onClick={() => { document.getElementById('paketi')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenu(false) }} className="text-sm text-left py-2 text-muted-foreground">Paketi</button>
-            <button onClick={() => { document.getElementById('cakalna-lista')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenu(false) }} className="text-sm text-left py-2 text-muted-foreground">FAQ</button>
+            <button onClick={() => { document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' }); setMobileMenu(false) }} className="text-sm text-left py-2 text-muted-foreground">FAQ</button>
             <a href="/blog" className="text-sm py-2 text-muted-foreground">Blog</a>
             <hr className="border-border my-1" />
             <a href="/prijava" className="text-sm py-2 text-muted-foreground">Prijava</a>
@@ -161,13 +174,12 @@ export default function Home() {
             </div>
 
             <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold tracking-[-0.04em] leading-[0.95] mb-6">
-              Dokumenti, ki<br />
-              <span className="text-primary">nikoli ne potečejo</span><br />
-              prezgodaj.
+              Vsi vaši roki.<br />
+              <span className="text-primary">Na enem mestu.</span>
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-              Vozniško, osebna, potni list — dodajte datume in prejmite e-mail opomnik tedne ali mesece prej. Enkrat nastavite, pozabite na skrbi.
+              Tehnični pregled, zavarovanje, registracija, zdravstvena kartica, garancije in osebni dokumenti. Za vso družino, z e-mail opomnikom pravočasno.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center mb-16">
@@ -179,24 +191,13 @@ export default function Home() {
               </a>
             </div>
 
-            {/* Social proof */}
             <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground flex-wrap">
-              <div className="flex items-center gap-2">
-                <div className="flex -space-x-1.5">
-                  {['M', 'A', 'T', 'J', 'K'].map((c, i) => (
-                    <div key={i} className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white text-[9px] font-bold border-2 border-background">{c}</div>
-                  ))}
-                </div>
-                <span>47+ uporabnikov</span>
-              </div>
-              <div className="flex items-center gap-1">
-                {[1,2,3,4,5].map(i => <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>)}
-                <span className="ml-1">5.0 ocena</span>
-              </div>
               <div className="flex items-center gap-1.5">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                <span>Varno prek Stripe</span>
+                <span>Varno plačilo prek Stripe</span>
               </div>
+              <span>Brez naročnine</span>
+              <span>Narejeno v Sloveniji 🇸🇮</span>
             </div>
           </motion.div>
 
@@ -204,7 +205,6 @@ export default function Home() {
           <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }} className="mt-20 relative">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background z-10 pointer-events-none" style={{ top: '70%' }} />
             <div className="rounded-2xl border border-border bg-card shadow-2xl overflow-hidden mx-auto max-w-4xl">
-              {/* Browser chrome */}
               <div className="bg-secondary/80 px-4 py-3 flex items-center gap-2 border-b border-border">
                 <div className="flex gap-1.5">
                   <div className="w-3 h-3 rounded-full bg-red-400" />
@@ -213,17 +213,16 @@ export default function Home() {
                 </div>
                 <div className="flex-1 bg-background rounded-md px-3 py-1 text-xs text-muted-foreground text-center mx-8">veljavno.si/dashboard</div>
               </div>
-              {/* Dashboard content */}
               <div className="bg-primary px-6 py-5">
                 <div className="flex items-center justify-between text-white mb-4">
                   <div>
                     <p className="text-blue-200 text-xs">Dober dan, Janez 👋</p>
-                    <p className="font-bold">Moji dokumenti</p>
+                    <p className="font-bold">Moji roki</p>
                   </div>
                   <div className="bg-white text-primary text-xs font-semibold px-3 py-1.5 rounded-full">+ Dodaj</div>
                 </div>
                 <div className="grid grid-cols-3 gap-3">
-                  {[{n:'1',l:'Poteče kmalu',c:'bg-red-500/20 text-red-200'},{n:'1',l:'Pozor',c:'bg-orange-500/20 text-orange-200'},{n:'2',l:'Veljavni',c:'bg-green-500/20 text-green-200'}].map(s => (
+                  {[{n:'1',l:'Poteče kmalu',c:'bg-red-500/20 text-red-200'},{n:'1',l:'Pozor',c:'bg-orange-500/20 text-orange-200'},{n:'1',l:'Veljavni',c:'bg-green-500/20 text-green-200'}].map(s => (
                     <div key={s.l} className={`${s.c} rounded-xl p-3 text-center`}>
                       <div className="text-xl font-bold">{s.n}</div>
                       <div className="text-xs mt-0.5">{s.l}</div>
@@ -233,9 +232,9 @@ export default function Home() {
               </div>
               <div className="p-4 space-y-3">
                 {[
-                  { ime: '🚗 Vozniško dovoljenje', datum: '6. 7. 2026', dni: 23, barva: 'bg-red-400', w: '6%', badge: 'bg-red-100 text-red-600' },
-                  { ime: '🪪 Osebna izkaznica', datum: '19. 8. 2026', dni: 67, barva: 'bg-orange-400', w: '18%', badge: 'bg-orange-100 text-orange-600' },
-                  { ime: '🌍 Potni list', datum: '19. 3. 2027', dni: 280, barva: 'bg-green-400', w: '77%', badge: 'bg-green-100 text-green-600' },
+                  { ime: '🔧 Tehnični pregled', datum: '14. 12. 2026', dni: 25, barva: 'bg-red-400', w: '7%', badge: 'bg-red-100 text-red-600' },
+                  { ime: '🛡️ Zavarovanje vozila', datum: '15. 2. 2027', dni: 88, barva: 'bg-orange-400', w: '24%', badge: 'bg-orange-100 text-orange-600' },
+                  { ime: '🌍 Potni list', datum: '19. 3. 2027', dni: 120, barva: 'bg-green-400', w: '33%', badge: 'bg-green-100 text-green-600' },
                 ].map(doc => (
                   <div key={doc.ime} className="bg-background rounded-xl p-4 border border-border">
                     <div className="flex items-center justify-between mb-2">
@@ -254,14 +253,12 @@ export default function Home() {
         </div>
       </section>
 
-      
-
       {/* Kako deluje */}
       <section className="py-24 md:py-32">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary mb-3">Kako deluje</p>
-            <h2 className="font-display text-4xl md:text-5xl font-bold tracking-[-0.03em]">Tri koraki do miru.</h2>
+            <h2 className="font-display text-4xl md:text-5xl font-bold tracking-[-0.03em]">Trije koraki do miru.</h2>
           </div>
           <div className="grid gap-4 md:grid-cols-3">
             {steps.map((step, index) => (
@@ -278,34 +275,46 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Primerjava */}
+      {/* Za koga */}
       <section className="py-24 md:py-32 bg-secondary/30">
+        <div className="max-w-6xl mx-auto px-5 md:px-8">
+          <div className="text-center mb-16">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary mb-3">Za koga</p>
+            <h2 className="font-display text-4xl md:text-5xl font-bold tracking-[-0.03em]">Narejeno za vsakdanje roke.</h2>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {zaKoga.map(z => (
+              <div key={z.naslov} className="bg-card border border-border rounded-2xl p-8">
+                <div className="text-3xl mb-4">{z.ikona}</div>
+                <h3 className="text-lg font-bold mb-2">{z.naslov}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{z.tekst}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Primerjava */}
+      <section className="py-24 md:py-32">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="mb-12">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary mb-3">Primerjava</p>
-            <h2 className="font-display text-4xl md:text-5xl font-bold tracking-[-0.03em]">Zakaj Veljavno?</h2>
+            <h2 className="font-display text-4xl md:text-5xl font-bold tracking-[-0.03em]">Kaj izbrati?</h2>
+            <p className="text-muted-foreground mt-3 max-w-2xl">eUprava je brezplačna in dobra za opomnik o poteku osebnih dokumentov. Veljavno pokriva vse ostale roke in celo družino.</p>
           </div>
           <div className="rounded-2xl border border-border overflow-hidden bg-card">
             <div className="grid grid-cols-4 bg-secondary/50 border-b border-border">
               <div className="p-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Funkcija</div>
               <div className="p-4 text-xs font-semibold text-center border-l border-border text-primary uppercase tracking-wider">Veljavno</div>
-              <div className="p-4 text-xs font-semibold text-center border-l border-border text-muted-foreground uppercase tracking-wider">Excel</div>
-              <div className="p-4 text-xs font-semibold text-center border-l border-border text-muted-foreground uppercase tracking-wider">Google Cal</div>
+              <div className="p-4 text-xs font-semibold text-center border-l border-border text-muted-foreground uppercase tracking-wider">eUprava</div>
+              <div className="p-4 text-xs font-semibold text-center border-l border-border text-muted-foreground uppercase tracking-wider">Koledar / Excel</div>
             </div>
-            {[
-              { funkcija: 'Avtomatski e-mail opomnik', veljavno: true, excel: false, gcal: false },
-              { funkcija: 'Več opomnikov hkrati', veljavno: true, excel: false, gcal: true },
-              { funkcija: 'Pregled vseh dokumentov', veljavno: true, excel: true, gcal: false },
-              { funkcija: 'Dostop iz telefona', veljavno: true, excel: false, gcal: true },
-              { funkcija: 'Sledenje za družino', veljavno: true, excel: false, gcal: false },
-              { funkcija: 'Brez vzdrževanja', veljavno: true, excel: false, gcal: false },
-              { funkcija: 'Enkratno plačilo', veljavno: true, excel: true, gcal: false },
-            ].map((v, i) => (
+            {primerjava.map((v, i) => (
               <div key={v.funkcija} className={`grid grid-cols-4 border-t border-border ${i % 2 === 0 ? '' : 'bg-secondary/20'}`}>
                 <div className="p-4 text-sm text-muted-foreground flex items-center">{v.funkcija}</div>
-                <div className="p-4 border-l border-border flex items-center justify-center">{v.veljavno ? <Kljukica /> : <Krizec />}</div>
-                <div className="p-4 border-l border-border flex items-center justify-center">{v.excel ? <Kljukica /> : <Krizec />}</div>
-                <div className="p-4 border-l border-border flex items-center justify-center">{v.gcal ? <Kljukica /> : <Krizec />}</div>
+                <div className="p-4 border-l border-border flex items-center justify-center"><Celica v={v.veljavno} /></div>
+                <div className="p-4 border-l border-border flex items-center justify-center"><Celica v={v.eUprava} /></div>
+                <div className="p-4 border-l border-border flex items-center justify-center"><Celica v={v.koledar} /></div>
               </div>
             ))}
           </div>
@@ -313,18 +322,18 @@ export default function Home() {
       </section>
 
       {/* Paketi */}
-      <section id="paketi" className="scroll-mt-20 py-24 md:py-32">
+      <section id="paketi" className="scroll-mt-20 py-24 md:py-32 bg-secondary/30">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary mb-3">Paketi</p>
             <h2 className="font-display text-4xl md:text-5xl font-bold tracking-[-0.03em] mb-4">Enkrat plačate. Za vedno mirni.</h2>
-            <p className="text-muted-foreground">Brez naročnine. Brez skritih stroškov. Za vedno.</p>
+            <p className="text-muted-foreground">Brez naročnine in brez skritih stroškov.</p>
           </div>
           <div className="grid gap-4 md:grid-cols-2 max-w-2xl mx-auto">
             {plans.map((plan) => (
               <motion.div key={plan.name} whileHover={{ y: -4 }} className={`relative rounded-2xl border p-8 transition-all ${plan.variant === 'druzinski' ? 'border-primary bg-primary text-white' : 'border-border bg-card'}`}>
                 {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider">Najbolj popularno</div>
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider">Najbolj priljubljeno</div>
                 )}
                 <h3 className={`text-xl font-bold mb-1 ${plan.variant === 'druzinski' ? 'text-white' : ''}`}>{plan.name}</h3>
                 <div className="flex items-end gap-1 mb-6">
@@ -348,80 +357,54 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimoniali */}
-      <section className="py-24 md:py-32 bg-secondary/30">
+      {/* Mobilna app */}
+      <section className="py-24 md:py-32">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
-          <div className="text-center mb-16">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary mb-3">Mnenja</p>
-            <h2 className="font-display text-4xl md:text-5xl font-bold tracking-[-0.03em]">Kar pravijo stranke.</h2>
-          </div>
-          <div className="grid gap-4 md:grid-cols-3">
-            {testimoniali.map(t => (
-              <div key={t.ime} className="bg-card border border-border rounded-2xl p-6">
-                <div className="flex gap-0.5 mb-4">
-                  {Array.from({ length: t.zvezdice }).map((_, i) => (
-                    <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#f59e0b"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <div className="rounded-2xl border border-border bg-card overflow-hidden">
+            <div className="grid md:grid-cols-2">
+              <div className="p-10 md:p-14 flex flex-col justify-center">
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary mb-4">Mobilna aplikacija</p>
+                <h2 className="font-display text-3xl md:text-4xl font-bold tracking-[-0.03em] mb-4">Veljavno kjerkoli.</h2>
+                <p className="text-muted-foreground mb-8 leading-relaxed">Dostopajte do svojih rokov na telefonu. Vse je sinhronizirano s spletom.</p>
+                <div className="flex flex-col gap-3 mb-10">
+                  {['Sinhronizirano s spletom', 'Brezplačno z vsakim paketom'].map(f => (
+                    <div key={f} className="flex items-center gap-3 text-sm text-muted-foreground">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      {f}
+                    </div>
                   ))}
                 </div>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-4">"{t.tekst}"</p>
-                <div>
-                  <p className="font-semibold text-sm">{t.ime}</p>
-                  <p className="text-xs text-muted-foreground">{t.vloga}</p>
+                <div className="inline-flex items-center gap-2 border border-border rounded-full px-5 py-2.5 text-sm text-muted-foreground w-fit">
+                  <span className="w-2 h-2 rounded-full bg-orange-400" />
+                  Prihaja kmalu na App Store in Google Play
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-   {/* Mobilna app */}
-<section className="py-24 md:py-32 bg-secondary/30">
-  <div className="max-w-6xl mx-auto px-5 md:px-8">
-    <div className="rounded-2xl border border-border bg-card overflow-hidden">
-      <div className="grid md:grid-cols-2">
-        <div className="p-10 md:p-14 flex flex-col justify-center">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary mb-4">Mobilna aplikacija</p>
-          <h2 className="font-display text-3xl md:text-4xl font-bold tracking-[-0.03em] mb-4">Veljavno kjerkoli.</h2>
-          <p className="text-muted-foreground mb-8 leading-relaxed">Dostopajte do svojih dokumentov na telefonu — iOS in Android. Vse sinhronizirano s spletom.</p>
-          <div className="flex flex-col gap-3 mb-10">
-            {['iOS in Android', 'Sinhronizirano s spletom', 'Brezplačno z vsakim paketom'].map(f => (
-              <div key={f} className="flex items-center gap-3 text-sm text-muted-foreground">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                {f}
-              </div>
-            ))}
-          </div>
-          <div className="inline-flex items-center gap-2 border border-border rounded-full px-5 py-2.5 text-sm text-muted-foreground w-fit">
-            <span className="w-2 h-2 rounded-full bg-orange-400" />
-            Prihaja kmalu na App Store in Google Play
-          </div>
-        </div>
-        <div className="bg-primary p-10 md:p-14 flex flex-col justify-center">
-          <div className="space-y-4">
-            {[
-              { ime: '🚗 Vozniško dovoljenje', dni: 23, barva: 'bg-red-400', w: '6%', badge: 'text-red-200 bg-red-500/20' },
-              { ime: '🪪 Osebna izkaznica', dni: 67, barva: 'bg-orange-400', w: '18%', badge: 'text-orange-200 bg-orange-500/20' },
-              { ime: '🌍 Potni list', dni: 280, barva: 'bg-green-400', w: '77%', badge: 'text-green-200 bg-green-500/20' },
-            ].map(doc => (
-              <div key={doc.ime} className="bg-white/10 rounded-xl p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-white text-sm font-medium">{doc.ime}</span>
-                  <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${doc.badge}`}>{doc.dni} dni</span>
-                </div>
-                <div className="h-1 bg-white/20 rounded-full">
-                  <div className={`h-1 ${doc.barva} rounded-full`} style={{ width: doc.w }} />
+              <div className="bg-primary p-10 md:p-14 flex flex-col justify-center">
+                <div className="space-y-4">
+                  {[
+                    { ime: '🔧 Tehnični pregled', dni: 25, barva: 'bg-red-400', w: '7%', badge: 'text-red-200 bg-red-500/20' },
+                    { ime: '🛡️ Zavarovanje vozila', dni: 88, barva: 'bg-orange-400', w: '24%', badge: 'text-orange-200 bg-orange-500/20' },
+                    { ime: '🌍 Potni list', dni: 120, barva: 'bg-green-400', w: '33%', badge: 'text-green-200 bg-green-500/20' },
+                  ].map(doc => (
+                    <div key={doc.ime} className="bg-white/10 rounded-xl p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-white text-sm font-medium">{doc.ime}</span>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${doc.badge}`}>{doc.dni} dni</span>
+                      </div>
+                      <div className="h-1 bg-white/20 rounded-full">
+                        <div className={`h-1 ${doc.barva} rounded-full`} style={{ width: doc.w }} />
+                      </div>
+                    </div>
+                  ))}
+                  <div className="bg-white rounded-xl p-3 text-center">
+                    <span className="text-primary text-sm font-semibold">+ Dodaj rok</span>
+                  </div>
                 </div>
               </div>
-            ))}
-            <div className="bg-white rounded-xl p-3 text-center">
-              <span className="text-primary text-sm font-semibold">+ Dodaj dokument</span>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
       {/* Waitlist */}
       <section id="cakalna-lista" className="py-24 md:py-32 bg-secondary/30">
@@ -438,12 +421,12 @@ export default function Home() {
             </Button>
           </form>
           {status === 'success' && <p className="text-center text-green-600 text-sm mt-4">Hvala, prijava je shranjena!</p>}
-          {status === 'error' && <p className="text-center text-red-500 text-sm mt-4">Napaka. Poskusite znova.</p>}
+          {status === 'error' && <p className="text-center text-red-500 text-sm mt-4">Napaka. Poskusite znova (morda ste se že prijavili).</p>}
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="py-24 md:py-32">
+      <section id="faq" className="scroll-mt-20 py-24 md:py-32">
         <div className="max-w-3xl mx-auto px-5 md:px-8">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary mb-3">FAQ</p>
@@ -469,7 +452,7 @@ export default function Home() {
       <section className="py-24 md:py-32 bg-primary">
         <div className="max-w-4xl mx-auto px-5 md:px-8 text-center text-white">
           <h2 className="font-display text-4xl md:text-6xl font-bold tracking-[-0.03em] mb-6">Začnite danes.</h2>
-          <p className="text-blue-100 text-lg mb-10 max-w-xl mx-auto">Nikoli več potekle vozniške ali osebne izkaznice. Enkrat nastavite — za vedno mirni.</p>
+          <p className="text-blue-100 text-lg mb-10 max-w-xl mx-auto">Nikoli več zamujenega roka. Enkrat nastavite, za vedno mirni.</p>
           <Button onClick={scrollToPackages} size="lg" className="bg-white text-primary hover:bg-blue-50 rounded-full px-10 py-6 text-sm font-semibold uppercase tracking-[0.16em]">
             Začni za 4,99 € →
           </Button>
@@ -525,10 +508,10 @@ export default function Home() {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
             <div className="text-3xl mb-4">🛡️</div>
-            <h2 className="text-xl font-bold mb-2">Varujte svoje dokumente</h2>
-            <p className="text-muted-foreground text-sm mb-6 leading-relaxed">Veljavno vas opomni preden poteče vozniška, osebna ali potni list.</p>
+            <h2 className="text-xl font-bold mb-2">Ne zamudite nobenega roka</h2>
+            <p className="text-muted-foreground text-sm mb-6 leading-relaxed">Veljavno vas opomni pred potekom tehničnega pregleda, zavarovanja, registracije in osebnih dokumentov.</p>
             <div className="space-y-2 mb-6">
-              {['🚗 Vozniško dovoljenje', '🪪 Osebna izkaznica', '🌍 Potni list'].map(d => (
+              {['🔧 Tehnični pregled', '🛡️ Zavarovanje', '🌍 Osebni dokumenti'].map(d => (
                 <div key={d} className="flex items-center gap-2 text-sm text-muted-foreground">
                   <div className="w-4 h-4 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
                     <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
