@@ -198,10 +198,10 @@ export default function Home() {
             <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground flex-wrap">
               <div className="flex items-center gap-1.5">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                <span>Varno plačilo prek Stripe</span>
+                <span>Hitra nastavitev v 2 minutah</span>
               </div>
               <span>Brez naročnine</span>
-              <span>Narejeno v Sloveniji 🇸🇮</span>
+              <span>Za vso družino</span>
             </div>
           </motion.div>
 
@@ -484,7 +484,7 @@ export default function Home() {
   <div className="w-8 h-0.5 bg-primary mt-1" />
 </div>
               </a>
-              <p className="text-sm text-muted-foreground max-w-xs">Sistem za pravočasne opomnike. Narejeno v Sloveniji 🇸🇮</p>
+              <p className="text-sm text-muted-foreground max-w-xs">Sistem za pravočasne opomnike.</p>
             </div>
             <div className="flex gap-16">
               <div className="flex flex-col gap-2">
