@@ -13,7 +13,7 @@ const plans = [
   {
     name: 'Samostojni',
     price: '4,99 €',
-    cadence: 'enkratno',
+    note: 'enkratno, brez naročnine',
     features: ['1 oseba', 'Neomejeni dokumenti in roki', 'E-mail opomniki', 'Izvoz v koledar'],
     popular: false,
     variant: 'samostojni',
@@ -21,8 +21,8 @@ const plans = [
   {
     name: 'Družinski',
     price: '9,99 €',
-    cadence: 'enkratno',
-    features: ['Do 6 oseb', 'Neomejeni dokumenti in roki', 'E-mail opomniki', 'Skupni pregled družine'],
+    note: 'enkratno, le 1,67 € na osebo',
+    features: ['Do 6 oseb', 'Neomejeni dokumenti in roki', 'E-mail opomniki', 'Izvoz v koledar', 'Skupni pregled družine'],
     popular: true,
     variant: 'druzinski',
   },
@@ -325,7 +325,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Paketi */}
+            {/* Paketi */}
       <section id="paketi" className="scroll-mt-20 py-24 md:py-32 bg-secondary/30">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
           <div className="text-center mb-16">
@@ -333,31 +333,50 @@ export default function Home() {
             <h2 className="font-display text-4xl md:text-5xl font-bold tracking-[-0.03em] mb-4">Enkrat plačate. Za vedno mirni.</h2>
             <p className="text-muted-foreground">Brez naročnine in brez skritih stroškov.</p>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 max-w-2xl mx-auto">
+
+          <div className="grid gap-6 md:grid-cols-2 max-w-3xl mx-auto items-stretch">
             {plans.map((plan) => (
-              <motion.div key={plan.name} whileHover={{ y: -4 }} className={`relative rounded-2xl border p-8 transition-all ${plan.variant === 'druzinski' ? 'border-primary bg-primary text-white' : 'border-border bg-card'}`}>
+              <div
+                key={plan.name}
+                className={`relative flex flex-col rounded-2xl bg-card p-8 md:p-9 ${
+                  plan.popular ? 'border-2 border-primary' : 'border border-border'
+                }`}
+              >
                 {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider">Najbolj priljubljeno</div>
+                  <span className="absolute -top-3 left-6 whitespace-nowrap rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800">
+                    Najbolj priljubljeno
+                  </span>
                 )}
-                <h3 className={`text-xl font-bold mb-1 ${plan.variant === 'druzinski' ? 'text-white' : ''}`}>{plan.name}</h3>
-                <div className="flex items-end gap-1 mb-6">
-                  <span className={`text-4xl font-bold tracking-tight ${plan.variant === 'druzinski' ? 'text-white' : ''}`}>{plan.price}</span>
-                  <span className={`pb-1 text-sm ${plan.variant === 'druzinski' ? 'text-blue-200' : 'text-muted-foreground'}`}>{plan.cadence}</span>
-                </div>
-                <ul className="space-y-3 mb-8">
+
+                <h3 className="text-lg font-bold">{plan.name}</h3>
+                <p className="mt-5 font-display text-5xl font-bold leading-none tracking-tight">{plan.price}</p>
+                <p className="mt-2 mb-7 text-sm text-muted-foreground">{plan.note}</p>
+
+                <ul className="mb-8 flex-1 space-y-3">
                   {plan.features.map((feature) => (
-                    <li key={feature} className={`flex items-center gap-2 text-sm ${plan.variant === 'druzinski' ? 'text-blue-100' : 'text-muted-foreground'}`}>
-                      <Check className={`h-4 w-4 flex-none ${plan.variant === 'druzinski' ? 'text-white' : 'text-primary'}`} />
+                    <li key={feature} className="flex items-center gap-3 text-sm">
+                      <span className="flex h-5 w-5 flex-none items-center justify-center rounded-full bg-primary/10 text-primary">
+                        <Check className="h-3 w-3" />
+                      </span>
                       {feature}
                     </li>
                   ))}
                 </ul>
-                <Button onClick={() => router.push(`/registracija?paket=${plan.variant}`)} className={`w-full rounded-full py-5 text-xs font-semibold uppercase tracking-[0.16em] ${plan.variant === 'druzinski' ? 'bg-white text-primary hover:bg-blue-50' : ''}`} variant={plan.popular ? 'default' : 'outline'}>
-                  Izberi paket
+
+                <Button
+                  onClick={() => router.push(`/registracija?paket=${plan.variant}`)}
+                  variant={plan.popular ? 'default' : 'outline'}
+                  className="h-12 w-full rounded-full text-sm font-semibold"
+                >
+                  Izberi {plan.name}
                 </Button>
-              </motion.div>
+              </div>
             ))}
           </div>
+
+          <p className="mt-8 text-center text-sm text-muted-foreground">
+            Varno plačilo prek Stripe. Račun in dostop takoj po plačilu.
+          </p>
         </div>
       </section>
 
