@@ -7,6 +7,15 @@ export const metadata: Metadata = {
 
 const clanki = [
   {
+    slug: 'tehnicni-pregled-kdaj-in-kako-ne-zamuditi-roka',
+    naslov: 'Tehnični pregled: kdaj ga moraš opraviti in kako ne zamuditi roka',
+    opis: 'Kdaj je prvi tehnični pregled, na koliko let ga ponavljaš in kako poskrbiš, da roka nikoli ne zamudiš.',
+    datum: '27. november 2026',
+    branje: '4 min',
+    ikona: '🔧',
+    kategorija: 'Vozilo',
+  },
+  {
     slug: 'voznicko-dovoljenje-podaljsanje',
     naslov: 'Kdaj poteče vozniško dovoljenje in kako ga podaljšati',
     opis: 'Vse kar morate vedeti o podaljšanju vozniškega dovoljenja v Sloveniji — roki, postopek, stroški.',
@@ -77,8 +86,8 @@ export default function Blog() {
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-16">
           {[
-            { stevilo: '3', opis: 'Članki' },
-            { stevilo: '11', opis: 'Minut branja' },
+            { stevilo: '4', opis: 'Članki' },
+            { stevilo: '15', opis: 'Minut branja' },
             { stevilo: '100%', opis: 'Brezplačno' },
           ].map(s => (
             <div key={s.opis} className="bg-card border border-border rounded-2xl p-5 text-center">
@@ -90,9 +99,9 @@ export default function Blog() {
 
         {/* Članki */}
         <div className="flex flex-col gap-6">
-          {clanki.map((clanek, i) => (
-            
-              <a key={clanek.slug}
+          {clanki.map((clanek) => (
+            <a
+              key={clanek.slug}
               href={`/blog/${clanek.slug}`}
               className="group bg-card border border-border rounded-2xl p-8 hover:border-primary hover:shadow-lg hover:shadow-primary/5 transition-all"
             >

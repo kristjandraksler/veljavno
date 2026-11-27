@@ -10,6 +10,49 @@ const clanki: Record<string, {
   kategorija: string
   vsebina: string
 }> = {
+  'tehnicni-pregled-kdaj-in-kako-ne-zamuditi-roka': {
+    naslov: 'Tehnični pregled: kdaj ga moraš opraviti in kako ne zamuditi roka',
+    opis: 'Kdaj je prvi tehnični pregled, na koliko let ga ponavljaš in kako poskrbiš, da roka nikoli ne zamudiš.',
+    datum: '27. november 2026',
+    branje: '4 min',
+    ikona: '🔧',
+    kategorija: 'Vozilo',
+    vsebina: `
+      <p>Tehnični pregled je ena tistih obveznosti, ki jo vsi poznamo, a jo prav zato radi pozabimo. Rok poteče neopazno, nalepka na registrski tablici pa nas opomni šele, ko je prepozno.</p>
+
+      <h2>Kdaj moraš na tehnični pregled?</h2>
+      <p>Za osebno vozilo brez omejitev je prvi tehnični pregled predpisan v <strong>4. letu po prvi registraciji</strong> vozila. Nato sledijo nadaljnji pregledi <strong>vsaki 2 leti</strong>.</p>
+      <p>Datum naslednjega pregleda je naveden na potrdilu o tehničnem pregledu. Zapiši si ga takoj, ne iz glave.</p>
+      <p>Za tovorna vozila, motorje, taksije, avtobuse in priklopnike lahko veljajo drugačni intervali, zato pri njih preveri uradne vire.</p>
+
+      <h2>Kaj se zgodi, če rok zamudiš?</h2>
+      <p>Vožnja brez veljavnega tehničnega pregleda je prekršek, težave pa lahko nastanejo tudi pri zavarovanju in podaljšanju registracije. Natančne zneske kazni in posledice preveri pri pristojnih organih.</p>
+
+      <h2>Kako se pripraviti na pregled</h2>
+      <ul>
+        <li>Prometno dovoljenje</li>
+        <li>Veljavno vozniško dovoljenje</li>
+        <li>Preverjene luči, brisalci in pnevmatike</li>
+        <li>Brez opozorilnih lučk na armaturni plošči</li>
+      </ul>
+      <p>Večina zavrnitev je posledica majhnih stvari, ki jih lahko popraviš vnaprej.</p>
+
+      <h2>Kako si rok zapomniti</h2>
+      <p>Tehnični pregled je pri večini ljudi le eden od več rokov: zavarovanje, registracija, vozniško dovoljenje, zdravstvena kartica. Če jih držiš v glavi, bo kakšen prej ali slej zdrsnil.</p>
+      <ul>
+        <li>Rok vpiši takoj, ko prejmeš potrdilo</li>
+        <li>Opomnik nastavi vsaj mesec dni prej, da imaš čas za termin</li>
+        <li>Za vsako vozilo v družini zapiši svoj rok</li>
+        <li>Vse datume hrani na enem mestu</li>
+      </ul>
+      <p>Veljavno vse to združi: dodaš tehnični pregled, zavarovanje, registracijo in druge roke, izbereš, koliko prej želiš opomnik, in prejmeš e-mail pravočasno.</p>
+
+      <h2>Pogosta vprašanja</h2>
+      <p><strong>Ali moram na pregled, če je vozilo novo?</strong><br/>Ne takoj. Prvi pregled je predpisan v 4. letu po prvi registraciji.</p>
+      <p><strong>Kje opravim tehnični pregled?</strong><br/>Pri pooblaščeni strokovni organizaciji. Termin običajno rezerviraš vnaprej.</p>
+      <p><em>Vir: gov.si, Tehnični pregled in registracija vozil. Pravila se lahko spremenijo, zato preveri aktualno stanje.</em></p>
+    `
+  },
   'voznicko-dovoljenje-podaljsanje': {
     naslov: 'Kdaj poteče vozniško dovoljenje in kako ga podaljšati',
     opis: 'Vse kar morate vedeti o podaljšanju vozniškega dovoljenja v Sloveniji — roki, postopek, stroški.',
@@ -222,6 +265,7 @@ export default async function ClanekPage({ params }: { params: Promise<{ slug: s
           <div className="grid gap-4 md:grid-cols-2">
             {Object.entries(clanki)
               .filter(([s]) => s !== slug)
+              .slice(0, 4)
               .map(([s, c]) => (
                 <a key={s} href={`/blog/${s}`} className="group bg-card border border-border rounded-2xl p-6 hover:border-primary transition-colors">
                   <div className="text-2xl mb-3">{c.ikona}</div>
